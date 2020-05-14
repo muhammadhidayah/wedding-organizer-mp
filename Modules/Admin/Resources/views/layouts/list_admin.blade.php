@@ -1,17 +1,17 @@
 @extends('admin::layouts.master')
 
 @section('content')
-<!-- Content Header (Page header) -->
+    <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0 text-dark">Bank(s)</h1>
+                <h1 class="m-0 text-dark">Admin(s)</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Bank(s)</li>
+                    <li class="breadcrumb-item active">Admin(s)</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -23,7 +23,7 @@
     <div class="card-header">
         <div class="btn-group">
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal-default">
-                <i class="fas fa-plus"></i> Add Bank
+                <i class="fas fa-plus"></i> Add Admin
             </button>
         </div>
     </div>
@@ -36,17 +36,21 @@
                         aria-describedby="example1_info">
                         <thead>
                             <tr role="row">
-                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-sort="ascending"
-                                    aria-label="Rendering engine: activate to sort column descending">#
+                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-sort="ascending">
+                                    #
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1" aria-label="">
-                                    Bank Code
+                                    Name
                                 </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Browser: activate to sort column ascending">Bank Name</th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Platform(s): activate to sort column ascending">Action(s)</th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
+                                    Email
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
+                                    Mobile Phone
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
+                                    Action(s)
+                                </th>
                             </tr>
                         </thead>
                         
@@ -67,30 +71,43 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Add Bank</h4>
+                <h4 class="modal-title">Add Admin</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form_bank" class="form-horizontal" role="form" novalidate="novalidate">
+                <form id="form_admin" class="form-horizontal" role="form" novalidate="novalidate">
                     <div class="form-group row">
-                        <label for="bank_code" class="col-sm-3 col-form-label">Bank Code</label>
+                        <label for="name" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-sm-9">
-                            <input type="text" name="bank_code" required class="form-control" placeholder="000">
+                            <input type="text" name="name" required class="form-control" placeholder="Enter full name ...">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="bank_name" class="col-sm-3 col-form-label">Bank Name</label>
+                        <label for="email" class="col-sm-3 col-form-label">Email</label>
                         <div class="col-sm-9">
-                            <input type="text" required name="bank_name" class="form-control" placeholder="Bank Central Asia">
+                            <input type="email" name="email" required class="form-control" placeholder="Enter user email ...">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="password" class="col-sm-3 col-form-label">Password</label>
+                        <div class="col-sm-9">
+                            <input type="password" name="password" required class="form-control" placeholder="Enter user password ...">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="mobile_phone" class="col-sm-3 col-form-label">Moblie Phone</label>
+                        <div class="col-sm-9">
+                            <input type="text" name="mobile_phone" required class="form-control" placeholder="Enter mobile phone number ...">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" onclick="addBankAccount()" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="addAdminAccount()" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -107,7 +124,7 @@
                 <i class="fas fa-2x fa-sync fa-spin"></i>
             </div>
             <div class="modal-header">
-                <h4 class="modal-title">Edit Bank</h4>
+                <h4 class="modal-title">Edit Admin</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -116,7 +133,7 @@
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" onclick="updateBankAccount()" class="btn btn-primary">Save changes</button>
+                <button type="button" onclick="updateAdminAccount()" class="btn btn-primary">Save changes</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -127,23 +144,13 @@
 
 @section('jsonpage')
 <script>
-    $(function () {
+    $(function() {
         $('#modal-default').on('hidden.bs.modal', function(){
             $(this).find('form')[0].reset();
         });
 
-        $('#modal-default').on('show.bs.modal', function(){
-            var form = $('#form_bank').validate()
-            form.resetForm()
-        });
-
-        $('#modal-edit-form').on('show.bs.modal', function(){
-            $('#modal_loading').show()
-        });
-        
-
-        var listBankTbl = $('#example1').DataTable({
-            "ajax": "{{ route('admin.bank', ['data' => 'json'] )}}",
+        $('#example1').DataTable({
+            "ajax": "{{ route('admin.listadmin', ['data' => 'json'] )}}",
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -156,58 +163,31 @@
                     data: 'id'
                 },
                 {
-                    data: 'bank_code'
+                    data: 'name'
                 },
                 {
-                    data: 'bank_name'
+                    data: 'email'
+                },
+                {
+                    data: 'mobile_phone'
                 },
                 {
                     data: 'id',
                     render: (data) => {
-                        return '<button type="button" onclick="editBankAccount('+data+')" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button><button type="button" class="btn btn-sm btn-danger" onclick="deleteBank('+data+')"><i class="fas fa-trash"></i></button>'
+                        return '<button type="button" onclick="editAdminAccount('+data+')" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></button><button type="button" class="btn btn-sm btn-danger" onclick="deleteAdminAccount('+data+')"><i class="fas fa-trash"></i></button>'
                     }
                 }
             ]
         });
-
-        $('#form_bank').validate({
-            rules: {
-                bank_name: {
-                    required: true
-                },
-                bank_code: {
-                    required: true
-                }
-            },
-            messages: {
-                bank_code: "Please enter a bank code",
-                bank_name: "Plase enter a bank name"
-            },
-            errorElement: 'span',
-            errorPlacement: function (error, element) {
-                error.addClass('invalid-feedback');
-                element.closest('.col-sm-9').append(error);
-            },
-            highlight: function (element, errorClass, validClass) {
-                $(element).addClass('is-invalid');
-            },
-            unhighlight: function (element, errorClass, validClass) {
-                $(element).removeClass('is-invalid');
-            }
-        });
-
-
     });
 
-    
-
-    function addBankAccount() { 
+    function addAdminAccount() { 
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: "{{ route('admin.bank') }}",
-            data: $('#form_bank').serialize(),
+            url: "{{ route('admin.add') }}",
+            data: $('#form_admin').serialize(),
             type: "POST",
             success: (resp) => {
                 Swal.fire(
@@ -224,7 +204,7 @@
         })
     }
 
-    function deleteBank(bank_id) {
+    function deleteAdminAccount(id) {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -235,19 +215,40 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.value) {
-                $('#example1').DataTable().ajax.reload();
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
+                var url = "{{ route('admin.delete', ':id') }}"
+                url = url.replace(":id", id)
+
+                var deleteAjx = () => {
+                    return $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: url,
+                        type: "DELETE",
+                    })
+                }
+
+                deleteAjx().then((resp) => {
+                    $('#example1').DataTable().ajax.reload();
+                    Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                    )    
+                }).fail((resp) => {
+                    Swal.fire(
+                        'Try Again ...',
+                        'Oooppsss!! Something goes wrong.',
+                        'error'
+                    ) 
+                })                
             }
         })
     }
 
-    function editBankAccount(id) {
+    function editAdminAccount(id) {
         $('#modal-edit-form').modal('show')
-        var url = "{{ route('admin.bank.detail', ':id') }}"
+        var url = "{{ route('admin.edit', ':id') }}"
         url = url.replace(":id", id)
         $.ajax({
             url: url,
@@ -267,9 +268,9 @@
         })
     }
 
-    function updateBankAccount() {
-        var id = $('form > input[name=id]').val()
-        var url = "{{ route('admin.bank.edit', ':id') }}"
+    function updateAdminAccount() {
+        var id = $('form > input[name=user_id]').val()
+        var url = "{{ route('admin.update', ':id') }}"
         url = url.replace(":id", id)
 
         $.ajax({
@@ -277,7 +278,7 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             url: url,
-            data: $('#edit_form_bank').serialize(),
+            data: $('#edit_form_admin').serialize(),
             type: "POST",
             success: (resp) => {
                 Swal.fire(
@@ -295,3 +296,4 @@
     }
 </script>
 @endsection
+

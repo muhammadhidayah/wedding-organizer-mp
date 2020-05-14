@@ -23,6 +23,13 @@
 	<!-- SweetAlert2 -->
 	<link rel="stylesheet" href="/modules/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 
+	<!-- DataTables -->
+	<link rel="stylesheet" href="/modules/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/modules/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+	<!-- Ekko Lightbox -->
+	<link rel="stylesheet" href="/modules/admin/plugins/ekko-lightbox/ekko-lightbox.css">
+
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 
 	@yield('cssonpage')
@@ -50,6 +57,9 @@
 	<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 	<script>
 		$.widget.bridge('uibutton', $.ui.button)
+		$(function() {
+			$('a[href="'+window.location.href+'"]').addClass('active')
+		})
 	</script>
 	<!-- Bootstrap 4 -->
 	<script src="/modules/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -64,7 +74,13 @@
 	<script src="/modules/admin/js/adminlte.js"></script>
 	<!-- AdminLTE for demo purposes -->
 	<script src="/modules/admin/js/demo.js"></script>
-
+	<!-- DataTables -->
+	<script src="/modules/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/modules/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/modules/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+	<script src="/modules/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+	<!-- Ekko Lightbox -->
+	<script src="/modules/admin/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
 	@yield('jsonpage')
 </body>
 </html>

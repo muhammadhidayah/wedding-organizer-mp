@@ -6,19 +6,21 @@ use App\Users;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
-class ProfileController extends Controller
+class CustomersController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = Auth::user();
-        return view('admin::profile', $user);
+        $json = $request->query('data');
+        if ($json != "") {
+            $customers = Users::where('usertype', 'member')->get();
+            return ['data' => $customers];
+        }
+        return view('admin::list_customer');
     }
 
     /**
@@ -37,23 +39,7 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        $user = Users::find($request->input('id'));
-        $picture = $request->file('profile_picture');
-        if($picture !== null) {
-            $name = $picture->store('');
-            $res = $request->file('profile_picture')->move('images/profile', $name);
-            $user->user_photo = $name;
-        }
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->mobile_phone = $request->input('mobile_phone');
-        if ($request->input('password') !== "") {
-            $password = Hash::make($request->input('password'));
-            $user->password = $password;
-        }
-        
-        $user->save();        
-        return view('admin::profile', $user);
+        //
     }
 
     /**
@@ -94,6 +80,7 @@ class ProfileController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Users::find($id);
+        return $user->delete();
     }
 }
