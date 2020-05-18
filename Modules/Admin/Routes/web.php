@@ -40,7 +40,8 @@ Route::group(['middleware' => ['adminauth'], 'prefix' => 'admin'], function()
     Route::get('/order/{id}', 'OrderController@detail')->name('admin.detail_order');
     Route::put('/order/{id}', 'OrderController@confirmation')->name('admin.order.confirmation');
 
-
+    Route::get('/configs_apps', 'ConfigController@index')->name('admin.config');
+    Route::post('/configs_apps', 'ConfigController@store')->name('admin.config');
 });
 
 Route::prefix('admin')->group(function() {

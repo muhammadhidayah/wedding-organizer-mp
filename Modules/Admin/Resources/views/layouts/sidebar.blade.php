@@ -39,6 +39,13 @@
                 </li>
 
                 <li class="nav-item">
+                    <a href="{{ route('admin.config') }}" class="nav-link">
+                        <i class="nav-icon fas fa-cog"></i>
+                        <p>Config App</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('admin.listadmin') }}" class="nav-link">
                         <i class="nav-icon fas fa-user-lock"></i>
                         <p>Admin(s)</p>
