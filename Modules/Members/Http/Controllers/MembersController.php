@@ -2,9 +2,11 @@
 
 namespace Modules\Members\Http\Controllers;
 
+use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class MembersController extends Controller
 {
@@ -14,7 +16,8 @@ class MembersController extends Controller
      */
     public function index()
     {
-        return view('members::listvendor');
+        $vendor = Vendor::all();
+        return view('members::listvendor', ['vendors' => $vendor]);
     }
 
     /**
@@ -24,6 +27,19 @@ class MembersController extends Controller
     public function create()
     {
         return view('members::create');
+    }
+
+    public function auth(Request $request) {
+        $validate = $request->validate([
+            'username' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        if (Auth::attempt(['email' => $validate['username'], 'password' => $validate['password'] ])) {
+            return redirect("/");
+        }
+
+        return response("", 401);
     }
 
     /**
