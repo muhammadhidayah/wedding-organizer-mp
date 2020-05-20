@@ -13,4 +13,12 @@ class Vendor extends Model
     public function albums() {
         return $this->hasMany(AlbumWedding::class, 'vendor_id');
     }
+
+    public function packages() {
+        return $this->hasMany(VendorPackage::class, 'vendor_id');
+    }
+
+    public function promos() {
+        return $this->hasMany(VendorPromo::class, 'vendor_id');
+    }
 }

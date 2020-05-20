@@ -17,14 +17,16 @@ Route::prefix('members')->group(function() {
 });
 
 Route::group(['middleware' => ['memberauth'], 'prefix' => 'members'], function() {
-    Route::get('/vendor/{slug}', function($slug) {
-        return "Vendor Page " . $slug;
-    })->name('member.vendor');
+    Route::get('/vendor/{slug}', 'VendorController@showVendor')->name('member.vendor');
+
+    Route::get('/check/vendor', 'VendorController@checkUserHave')->name('member.check.vendor');
 
     Route::get('/create-vendor', 'VendorController@create')->name('members.create.vendor');
     Route::post('/create-vendor', 'VendorController@store')->name('members.create.vendor');
     Route::get('/manage-vendor', 'VendorController@manage')->name('members.manage.vendor');
+
     Route::post("/manage-vendor/real-wedding", 'VendorController@storeAlbum')->name('vendor.add.album');
+
     Route::post("/manage-vendor/add-photo/album", 'VendorController@storePhotoAlbum')->name("vendor.add.photo.album");
     Route::get("/manage-vendor/list/album", 'VendorController@listalbum')->name('vendor.list.album');
 
@@ -32,4 +34,6 @@ Route::group(['middleware' => ['memberauth'], 'prefix' => 'members'], function()
     Route::get("/manage-vendor/list/package", 'PackageController@list')->name('vendor.list.package');
 
     Route::get("/manage-vendor/list/promo/{vendor_id}", 'PromoController@list')->name('vendor.list.promo');
+
+    Route::post("/orders", "OrderController@store")->name('member.order');
 });

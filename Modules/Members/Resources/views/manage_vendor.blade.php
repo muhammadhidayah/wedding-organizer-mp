@@ -276,7 +276,7 @@
                 }, {
                     data: 'banner_album',
 					render: (data) => {
-						return '<img src="/images/wedding/banner/'+data+'">'
+						return '<img src="/images/wedding/banner/'+data+'" width="100">'
 					}
                 }, {
                     data: 'id',
@@ -402,10 +402,14 @@
 		$('form[name="create_wedding_albums"]').on('submit', function(e) {
 			e.preventDefault()
 			var validate = $(this).validate()
+
+			var formData = new FormData(this)
 			$.ajax({
 				url: "{{ route('vendor.add.album') }}",
 				type: "POST",
-				data: $(this).serialize(),
+				data: formData,
+				processData: false,
+  				contentType: false,
 				success: (response) => {
 					var resp = JSON.parse(response)
 					$('input[name="album_id"]').val(resp)

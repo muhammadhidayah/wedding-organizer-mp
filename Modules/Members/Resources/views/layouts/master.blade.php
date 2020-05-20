@@ -20,7 +20,7 @@
 
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-light">
-		<a class="navbar-brand" href="#">Weddingku.com</a>
+		<a class="navbar-brand" href="{{ route('member.home') }}">Weddingku.com</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -45,11 +45,7 @@
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" href="#">MY PROFILE</a>
-					@if (false)
-						
-					@else
-						<a class="dropdown-item" href="{{ route('members.create.vendor') }}">MANAGE VENDOR</a>
-					@endif
+					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">MANAGE VENDOR</a>
 					
 					<a class="dropdown-item" href="#">SETTINGS</a>
 					<a class="dropdown-item" href="#">SIGN OUT</a>
@@ -184,14 +180,25 @@
 	<script src="/modules/members/js/bootstrap.js"></script>
 	<script src="/modules/members/script.js"></script>
 	<script>
-		@if (Auth::check() === FALSE)
-			$(function() {
+		$(function() {
+			@if (Auth::check() === FALSE)
 				$('#loginModal').modal({
 					backdrop: 'static',
 					keyboard: false
 				});
+			@endif
+
+			$.ajax({
+				type: "GET",
+				url: "{{ route('member.check.vendor', ['user_id' => Auth::id()]) }}",
+				success: (resp) => {
+					if(resp) {
+						document.querySelector("#navbarSupportedContent > div > div > a:nth-child(2)").setAttribute('href', "{{ route('members.manage.vendor') }}")
+						
+					}
+				}
 			})
-		@endif
+		})
 
 		function authenticationUser() {
 			var formData = $('form[name="form_login"]')

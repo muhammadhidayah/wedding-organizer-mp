@@ -85,7 +85,6 @@ class VendorController extends Controller
 
         $banner = $request->file('banner_album');
         if ($banner !== null) {
-            return "masuk sini";
             $banner_name = $banner->store('');
             $res = $banner->move('images/wedding/banner', $banner_name);
             $album->banner_album = $banner_name;
@@ -162,5 +161,19 @@ class VendorController extends Controller
         }
 
         return ['data' => $albums];
+    }
+
+    public function showVendor($slug) {
+        $vendor = Vendor::where('vendor_slug', $slug)->first();
+        return view("members::show_vendor", ['vendor' => $vendor]);
+    }
+
+    public function checkUserHave(Request $request) {
+        $vendor = Vendor::where('user_id', $request->input('user_id'))->first();
+        if ($vendor == null) {
+            return false;
+        }
+
+        return true;
     }
 }

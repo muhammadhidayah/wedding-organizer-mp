@@ -15,4 +15,8 @@ class Users extends Model
     public function orders() {
         return $this->hasMany('App\Order', 'foreign_key');
     }
+
+    public function vendor() {
+        return $this->hasOne(Vendor::class, 'user_id');
+    }
 }
