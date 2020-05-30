@@ -29,7 +29,7 @@ class VendorController extends Controller
     public function create()
     {
         $vendor = Vendor::where('user_id', Auth::id())->first();
-        if (count($vendor) > 0) {
+        if ($vendor) {
             return redirect("/manage-vendor", ['vendor' => $vendor]);
         }
 
