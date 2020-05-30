@@ -44,7 +44,7 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         $vendor = Vendor::where('user_id', Auth::id())->first();
-        if (count($vendor->get()) > 0) {
+        if ($vendor) {
             $vendor = Vendor::where('user_id', Auth::id())->first();
             return redirect("/manage-vendor", ['vendor' => $vendor]);
         }

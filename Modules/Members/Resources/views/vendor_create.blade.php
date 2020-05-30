@@ -63,7 +63,7 @@
                 type: "POST",
                 data: $(this).serialize(),
                 success: (resp) => {
-                    location.reload()
+                    window.location = "{{ route('members.manage.vendor')}}"
                 },
                 error: (response) => {
                     var resp = response.responseJSON
