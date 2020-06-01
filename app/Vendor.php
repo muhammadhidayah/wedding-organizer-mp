@@ -21,4 +21,12 @@ class Vendor extends Model
     public function promos() {
         return $this->hasMany(VendorPromo::class, 'vendor_id');
     }
+
+    public function orders() {
+        return $this->hasMany(Order::class, 'vendor_id');
+    }
+
+    public function bank() {
+        return $this->hasOne(VendorAccountBank::class, 'vendor_id');
+    }
 }

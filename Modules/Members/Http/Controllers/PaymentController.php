@@ -2,12 +2,15 @@
 
 namespace Modules\Members\Http\Controllers;
 
-use App\VendorPromo;
+use App\Order;
+use App\PaymentConfirmation;
+use App\ProgressOrder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
-class PromoController extends Controller
+class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,15 +19,6 @@ class PromoController extends Controller
     public function index()
     {
         return view('members::index');
-    }
-
-    public function list($vendor_id) {
-        $promos = VendorPromo::where('vendor_id', $vendor_id)->get();
-        foreach($promos as $promo) {
-            $promo->packages;
-        }
-
-        return ['data' => $promos];
     }
 
     /**
@@ -41,27 +35,41 @@ class PromoController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
         $validator = $request->validate([
-            'title' => 'required|string',
-            'discount' => 'required|numeric|max:100|min:0',
-            'duration_date' => 'required'
+            'proof_of_payment' => 'required|mimes:jpeg,bmp,png'
         ]);
+        
+        $user = Auth::user();
+        $order = Order::where('id', $id)
+                        ->where('user_id', $user->id)->get()->first();
+        
+        if ($order === null) {
+            return response('', 400);
+        }
 
-        $duration = $request->input('duration_date');
-        $duration = explode(" - ", $duration);
-        $startDate = date("Y-m-d", strtotime($duration[0]));
-        $endDate = date("Y-m-d", strtotime($duration[1]));
+        $paymentProofImg = $request->file('proof_of_payment');
+        $order->payment_status = "confirmation";
+        $order->save();
+        $paymentProof = new PaymentConfirmation();
+        $paymentProof->order_id = $id;
+        $paymentProof->user_id = $user->id;
+        $paymentProof->payment_proof_img = "temp.jpeg";
+        $paymentProof->save();
+        
+        $imgName = "payment_proof_".$paymentProof->id."_".$order->id.".".$paymentProofImg->extension();
+        $paymentProofImg->move("images/payment", $imgName);
 
-        $promo = new VendorPromo();
-        $promo->title_promo = $request->input('title');
-        $promo->discount_promo = $validator['discount'];
-        $promo->start_date = $startDate;
-        $promo->end_date = $endDate;
-        $promo->vendor_id = $request->input('vendor_id');
+        $paymentProof->payment_proof_img = $imgName;
+        $paymentProof->save();
 
-        return $promo->save();
+        $progressOrder = new ProgressOrder();
+        $progressOrder->progress_order = "payment confirmation";
+        $progressOrder->order_id = $order->id;
+        $progressOrder->user_id = $user->id;
+
+        return $progressOrder->save();        
     }
 
     /**
@@ -102,7 +110,6 @@ class PromoController extends Controller
      */
     public function destroy($id)
     {
-        $promo = VendorPromo::find($id);
-        return $promo->delete();
+        //
     }
 }

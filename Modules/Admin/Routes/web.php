@@ -14,7 +14,7 @@
 // Route::prefix('admin')->group(function() {
 //     Route::get('/', 'AdminController@index');
 // });
-Route::group(['middleware' => ['adminauth'], 'prefix' => 'admin'], function()
+Route::group(['middleware' => ['adminauth', 'can:isAdmin'], 'prefix' => 'admin'], function()
 {
     Route::get('/', 'AdminController@index')->name('admin.index');
     Route::post('/', 'ListAdminController@store')->name('admin.add');

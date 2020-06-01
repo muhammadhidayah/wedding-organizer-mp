@@ -19,4 +19,8 @@ class Order extends Model
     public function confirmation() {
         return $this->hasMany('App\PaymentConfirmation', 'order_id');
     }
+
+    public function progress() {
+        return $this->hasMany('App\ProgressOrder', 'order_id');
+    }
 }

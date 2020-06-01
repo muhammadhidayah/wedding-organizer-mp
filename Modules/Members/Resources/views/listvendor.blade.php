@@ -30,11 +30,24 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="bg-img-banner">
-                            <img src="/modules/members/img/vendor1.jpg" alt="">
+                            @php
+                                $banner = "/modules/members/img/vendor1.jpg";
+                                $public_path = public_path("/images/vendor");
+                                if (file_exists($public_path . "/thumbnail_vendor_".$vendor->id."_banner.png")) {
+                                    $banner = "/images/vendor/thumbnail_vendor_".$vendor->id."_banner.png";
+                                }
+                            @endphp
+                            <img src="{{ $banner }}" alt="">
                         </div>
                         <div class="avatar block">
                             <a href="{{ route('member.vendor', ['slug' => $vendor->vendor_slug ]) }}">
-                                <img src="/modules/members/img/vendor1.jpg" alt="" width="50">
+                                @php
+                                    $img = "/modules/members/img/vendor1.jpg";
+                                    if (file_exists($public_path . "/thumbnail_vendor_".$vendor->id."_photo.jpeg")) {
+                                        $img = "/images/vendor/thumbnail_vendor_".$vendor->id."_photo.jpeg";
+                                    }
+                                @endphp
+                                <img src="{{ $img }}" alt="" width="50">
                             </a>
                         </div>
 

@@ -61,7 +61,9 @@ class PackageController extends Controller
      */
     public function show($id)
     {
-        return view('members::show');
+        $package = VendorPackage::find($id);
+        $package->price_package = number_format($package->price_package, 2, ',', '.');
+        return view('members::package_detail', ['package' => $package]);
     }
 
     /**
@@ -92,6 +94,7 @@ class PackageController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $package = VendorPackage::find($id);
+        return $package->delete();
     }
 }

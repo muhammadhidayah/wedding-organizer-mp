@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VendorPromo extends Model
 {
+    use SoftDeletes;
+    
     protected $table = "vendor_promo";
 
     public function packages() {

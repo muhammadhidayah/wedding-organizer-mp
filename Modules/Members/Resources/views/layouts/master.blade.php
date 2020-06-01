@@ -11,6 +11,8 @@
 	<link rel="stylesheet" href="/modules/members/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="/modules/members/bootstrap-4.5.0-dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/modules/members/css/bootstrap.min.css">
+	<!-- SweetAlert2 -->
+	<link rel="stylesheet" href="/modules/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	@yield('cssonpage')
 	<title>Weddingku.com</title>
@@ -33,7 +35,7 @@
 			@if (Auth::check())
 			<div class="dropdown ml-auto">
 				@if (Auth::user()->user_photo != "")
-				<img class="user rounded-circle" src="/modules/members/img/{{ Auth::user()->user_photo }}" alt="user" />
+				<img class="user rounded-circle" src="/images/profile/{{ Auth::user()->user_photo }}" alt="user" />
 				@else
 				<img class="user rounded-circle" src="/modules/members/img/user.jpg" alt="user" />
 				@endif
@@ -44,11 +46,11 @@
 					{{ Auth::user()->name }}
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-					<a class="dropdown-item" href="#">MY PROFILE</a>
-					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">MANAGE VENDOR</a>
+					<a class="dropdown-item" href="{{ route('member.profile')}}">My Profile</a>
+					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">Manage Vendor</a>
 					
-					<a class="dropdown-item" href="#">SETTINGS</a>
-					<a class="dropdown-item" href="#">SIGN OUT</a>
+					<a class="dropdown-item" href="{{ route('member.list.order') }}">My Orders</a>
+					<a class="dropdown-item" href="{{ route('member.logout')}}">Sign Out</a>
 				</div>
 
 			</div>
@@ -179,9 +181,12 @@
 	<script src="./dropzone/dist/dropzone.js"></script> -->
 	<script src="/modules/members/js/bootstrap.js"></script>
 	<script src="/modules/members/script.js"></script>
+	<!-- SweetAlert2 -->
+	<script src="/modules/admin/plugins/sweetalert2/sweetalert2.min.js"></script>
 	<script>
 		$(function() {
-			@if (Auth::check() === FALSE)
+			console.log("{{ Request::url() }}")
+			@if (Auth::check() === FALSE && Request::url() !== url('members/register'))
 				$('#loginModal').modal({
 					backdrop: 'static',
 					keyboard: false

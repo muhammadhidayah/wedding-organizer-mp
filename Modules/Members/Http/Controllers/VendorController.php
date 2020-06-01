@@ -3,10 +3,14 @@
 namespace Modules\Members\Http\Controllers;
 
 use App\Vendor;
+use App\VendorAccountBank;
+use Intervention\Image\Facades\Image;
+use App\VendorPackage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Modules\Admin\Entities\Banks;
 use Modules\Members\Entities\AlbumWedding;
 use Modules\Members\Entities\CollectionPhotoAlbum;
 
@@ -72,7 +76,10 @@ class VendorController extends Controller
 
     public function manage() {
         $vendor = Vendor::where("user_id", Auth::id())->first();
-        return view("members::manage_vendor", ['vendor' => $vendor]);
+        $package = VendorPackage::where('vendor_id', $vendor->id)->get();
+        $bankAccount = $vendor->bank;
+        $listBank = Banks::all();
+        return view("members::manage_vendor", ['vendor' => $vendor, 'packages' => $package, 'bankAccount' => $bankAccount, 'listBank' => $listBank]);
     }
 
     public function storeAlbum(Request $request) {
@@ -113,6 +120,11 @@ class VendorController extends Controller
         return $photoCollection->save();
     }
 
+    public function destroyAlbum($id) {
+        $album = AlbumWedding::find($id);
+        return $album->delete();
+    }
+
     /**
      * Show the specified resource.
      * @param int $id
@@ -128,9 +140,51 @@ class VendorController extends Controller
      * @param int $id
      * @return Response
      */
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        return view('members::edit');
+        $validate = $request->validate([
+            'vendor_name' => 'required',
+            'vendor_about' => 'required',
+            'vendor_phone' => 'required',
+            'vendor_address' => 'required',
+            'vendor_photo' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'vendor_banner' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        $vendor = Vendor::find($id);
+        $vendorPhoto = $request->file('vendor_photo');
+        $vendorBanner = $request->file('vendor_banner');
+        $vendorPhotoDestination = public_path("/images/vendor");
+        if ($vendorPhoto !== null) {
+            $photoName = "vendor_".$vendor->id."_photo.jpeg";
+            $photoNameThumb = "thumbnail_".$photoName;            
+            $imgVendor = Image::make($vendorPhoto->path());
+            $imgVendor->resize(50, 40, function($constraint) {
+                $constraint->aspectRatio();
+            })->save($vendorPhotoDestination."/".$photoNameThumb, null, "jpg");
+            $vendorPhoto->move($vendorPhotoDestination, $photoName);
+        }
+
+        if ($vendorBanner !== null) {
+            $photoName = "vendor_".$vendor->id."_banner.png";
+            $photoNameThumb = "thumbnail_".$photoName;           
+            $imgVendor = Image::make($vendorBanner->path());
+            $imgVendor->resize(253, 90, function($constraint) {
+                $constraint->aspectRatio();
+            })->save($vendorPhotoDestination."/".$photoNameThumb, null, "png");
+            $vendorBanner->move($vendorPhotoDestination, $photoName);
+        }
+
+        $vendor->vendor_name = $request->input('vendor_name');
+        // create slug for vendor
+        $vendorname = strtolower($vendor->vendor_name);
+        $slug = sprintf("%s-%s", $vendor->user_id, str_replace(" ", "-",$vendorname));
+        $vendor->vendor_slug = $slug;
+        $vendor->vendor_about = $request->input('vendor_about');
+        $vendor->vendor_phone = $request->input('vendor_phone');
+        $vendor->vendor_address = $request->input('vendor_address');
+
+        return $vendor->save();
     }
 
     /**
@@ -175,5 +229,21 @@ class VendorController extends Controller
         }
 
         return true;
+    }
+
+    public function editBankAccount($vendor_id, Request $request) {
+        $bankAccount = VendorAccountBank::where('vendor_id', $vendor_id)
+                                        ->get()
+                                        ->first();
+        if ($bankAccount == null) {
+            $bankAccount = new VendorAccountBank();
+        }
+
+        $bankAccount->bank_id = $request->input('bank_code');
+        $bankAccount->bank_account_number = $request->input('account_number');
+        $bankAccount->vendor_id = $vendor_id;
+        $bankAccount->is_active = 1;
+
+        return $bankAccount->save();
     }
 }

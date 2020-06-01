@@ -98,10 +98,7 @@
 								<div class="card mt-4">
                                     <div class="card-body text-center" id="cardPackage">
                                         <div class="row">
-                                            <div class="col-md-4">
-                                                <img class="package"src="img/package.jpg">
-                                            </div>
-                                            <div class="col-md-4 mt-3 text-left">
+                                            <div class="col-md-8 mt-3 text-left">
                                                 <h6>{{ $package->title_package }}</h6>
                                                 <p>Rp. {{ $package->price_package }}</p>
                                             </div>
@@ -109,6 +106,9 @@
                                                 <button type="button" class="btn btn-success"   id="buyPackage" onclick="showModalOrder({{$vendor->id}}, {{ $package->id}})">
                                                     Buy Package
                                                     <span><i class="fa fa-plus"></i></span>
+                                                </button> <br>
+                                                <button onclick="showDetailPackage('{{ $vendor->id }}', '{{ $package->id}}')" class="btn btn-primary" style="border-radius: 40px">
+                                                    Detail <i class="fa fa-info"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -186,6 +186,24 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade" id="modal_detail_package" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Detail Package</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @endsection
 
 @section('cssonpage')
@@ -239,6 +257,19 @@
 			$('input[name="vendor_id"]').val(vendor_id)
 			$('input[name="package_id"]').val(package_id)
 		}
+
+        function showDetailPackage(vendor_id, package_id) {
+            $('#modal_detail_package').modal('show');
+            var url = "{{ route('package.detail', ':id')}}"
+            url = url.replace(":id", package_id)
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: (resp) => {
+                    $('#modal_detail_package > div > div > div.modal-body').html(resp)
+                }
+            })
+        }
 
 
     </script>
