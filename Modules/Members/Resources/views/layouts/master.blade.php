@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
+	@php
+	$config = App\Config::find(1);
+@endphp
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8" />
@@ -15,14 +17,15 @@
 	<link rel="stylesheet" href="/modules/admin/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	@yield('cssonpage')
-	<title>Weddingku.com</title>
+	<title>{{ $config->app_name }}</title>
 </head>
+
 
 <body>
 
 	<!-- Navbar -->
 	<nav class="navbar navbar-expand-lg navbar-light">
-		<a class="navbar-brand" href="{{ route('member.home') }}">Weddingku.com</a>
+		<a class="navbar-brand" href="{{ route('member.home') }}">{{ $config->app_name }}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -96,7 +99,7 @@
 					</div>
 				</form>
 				<div class="form-group text-center mt-2">
-					<span>Don't have an account? <a href="#">SIGN UP NOW</a></span>
+					<span>Don't have an account? <a href="{{ route('member.register')}}">SIGN UP NOW</a></span>
 				</div>
 			</div>
 		</div>
