@@ -170,6 +170,6 @@ class MembersController extends Controller
 
     public function logout() {
         Auth::logout();
-        return redirect('members/home');
+        return redirect('members');
     }
 }
