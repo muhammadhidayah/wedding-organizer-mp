@@ -623,7 +623,7 @@
 
 		$('form[name="promo_register_form"]').on('submit', function(e) {
 			e.preventDefault()
-			var validate = $(this).validate({
+			var validate = $('form[name="promo_register_form"]').validate({
 				errorPlacement: function(error, element) {
 					if( element.is(':radio') || element.is(':checkbox')) {
 					} else {
@@ -636,7 +636,7 @@
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},
 				url: "{{ route('vendor.promo.add') }}",
-				data: $(this).serialize() + "&vendor_id={{ $vendor->id }}",
+				data: $('form[name="promo_register_form"]').serialize() + "&vendor_id={{ $vendor->id }}",
 				type: "POST",
 				success: (resp) => {
 					$('#addPromo').modal('hide')
@@ -694,7 +694,7 @@
 
 		$('form[name="create_wedding_albums"]').on('submit', function(e) {
 			e.preventDefault()
-			var validate = $(this).validate()
+			var validate = $('form[name="create_wedding_albums"]').validate()
 
 			var formData = new FormData(this)
 			$.ajax({
@@ -717,7 +717,7 @@
 
 		$('form[name="create_package_form"]').on("submit", function(e) {
 			e.preventDefault()
-			var validate = $(this).validate()
+			var validate = $('form[name="create_wedding_albums"]').validate()
 			$.ajax({
 				url: "{{ route('vendor.add.package', ['vendor_id' => $vendor->id]) }}",
 				headers: {

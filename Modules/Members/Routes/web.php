@@ -47,7 +47,7 @@ Route::group(['middleware' => ['memberauth'], 'prefix' => 'members'], function()
     Route::get("/manage-vendor/list/package", 'PackageController@list')->name('vendor.list.package');
 
     Route::get("/manage-vendor/list/promo/{vendor_id}", 'PromoController@list')->name('vendor.list.promo');
-    Route::post("/manage-vendor/promo", 'PromoController@store')->name('vendor.promo.add');
+    Route::post("/manage-vendor/promo/add", 'PromoController@store')->name('vendor.promo.add');
     Route::delete("/manage-vendor/promo/{id}", 'PromoController@destroy')->name('vendor.promo.delete');
 
     Route::get("/manage-vendor/{id}/orders", 'OrderController@listOrderVendor')->name('vendor.list.order');

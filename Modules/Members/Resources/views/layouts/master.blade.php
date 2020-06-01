@@ -49,8 +49,8 @@
 					<a class="dropdown-item" href="{{ route('member.profile')}}">My Profile</a>
 					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">Manage Vendor</a>
 					
-					<a class="dropdown-item" href="{{ route('member.list.order') }}">My Orders</a>
-					<a class="dropdown-item" href="{{ route('member.logout')}}">Sign Out</a>
+					<a class="dropdown-item" href="#">My Orders</a>
+					<a class="dropdown-item" href="{{ route('member.logout')}}">SIGN OUT</a>
 				</div>
 
 			</div>

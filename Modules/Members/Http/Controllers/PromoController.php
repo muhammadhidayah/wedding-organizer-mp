@@ -2,6 +2,7 @@
 
 namespace Modules\Members\Http\Controllers;
 
+use App\PivotPromoPackage;
 use App\VendorPromo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -60,8 +61,13 @@ class PromoController extends Controller
         $promo->start_date = $startDate;
         $promo->end_date = $endDate;
         $promo->vendor_id = $request->input('vendor_id');
+        $promo->save();
 
-        return $promo->save();
+        $promoMap = new PivotPromoPackage();
+        $promoMap->promo_id = $promo->id;
+        $promoMap->package_id = $request->input('package_list');
+        
+        return $promoMap->save();
     }
 
     /**
