@@ -52,7 +52,7 @@
 					<a class="dropdown-item" href="{{ route('member.profile')}}">My Profile</a>
 					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">Manage Vendor</a>
 					
-					<a class="dropdown-item" href="#">My Orders</a>
+					<a class="dropdown-item" href="{{ route('member.list.order')}}">My Orders</a>
 					<a class="dropdown-item" href="{{ route('member.logout')}}">SIGN OUT</a>
 				</div>
 
@@ -137,10 +137,8 @@
 		<div class="jumbotron about">
 			<div class="row">
 				<div class="col-md-6">
-					<h4>Weddingku</h4>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo quaerat eveniet esse cum, a
-						repellat officia quos modi magnam neque ad harum, quidem similique nisi quam consequuntur,
-						repellendus amet provident?</p><br>
+					<h4>{{ $config->app_name }}</h4>
+					<p>{{ $config->app_about }}</p><br>
 					<h4 class="mb-2" id="logoFollow">FOLLOW US</h4>
 					<a href="">
 						<i class="fa fa-facebook-f fa-lg"></i>
@@ -161,9 +159,8 @@
 				</div>
 				<div class="col-md-4 ">
 					<h4>Call Us</h4>
-					<p>Jl. Guntur No.18 Setia Budi Jakarta Selatan</p>
-					<p>Email : weddingku@gmail.co.id</p>
-					<p>Handphone : 0813492847</p>
+					<p>{{ $config->app_address }}</p>
+					<p>Handphone : {{ $config->phone_number }}</p>
 				</div>
 			</div>
 		</div>
