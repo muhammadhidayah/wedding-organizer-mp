@@ -45,9 +45,13 @@ class OrderController extends Controller
         $order->address = $request->input('address');
         $order->package_id = $request->input('package_id');
         $order->user_id = Auth::id();
-        $order->total_price = $package->price_package;
+
+        $promo = $package->promo;
+        $discount = $promo->discount_promo / 100 * $package->price_package;
+        $order->total_price = $package->price_package - $discount;
         $date = date("Y-m-d");
         $vendor = Vendor::find($request->input('vendor_id'));
+        $order->promo_id = $promo->id;
         
         $order->vendor_id = $vendor->id;
         $order->inv_number = "INV/".$date."/".$vendor->vendor_slug."/".time();

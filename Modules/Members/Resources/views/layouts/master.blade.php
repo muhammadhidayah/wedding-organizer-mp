@@ -217,6 +217,13 @@
 				success: (resp) => {
 					$('#loginModal').modal('hide')
 					location.reload()
+				},
+				error: () => {
+					Swal.fire({
+						title: 'Invalid!',
+						text: 'Username / Password',
+						icon: 'error',
+					})
 				}
 			})
 		}
