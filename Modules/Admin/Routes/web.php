@@ -20,6 +20,10 @@ Route::group(['middleware' => ['adminauth', 'can:isAdmin'], 'prefix' => 'admin']
     Route::post('/', 'ListAdminController@store')->name('admin.add');
     Route::delete('/{id}', 'ListAdminController@destroy')->name('admin.delete');
 
+    Route::get('/signout', function() {
+        Auth::logout();
+        return redirect()->route('admin.login');
+    })->name('admin.logout');
     Route::get('/profile', 'ProfileController@index')->name('admin.profile');
     Route::post('/profile', 'ProfileController@store')->name('admin.profile');
 
@@ -42,6 +46,8 @@ Route::group(['middleware' => ['adminauth', 'can:isAdmin'], 'prefix' => 'admin']
 
     Route::get('/configs_apps', 'ConfigController@index')->name('admin.config');
     Route::post('/configs_apps', 'ConfigController@store')->name('admin.config');
+
+    Route::get('/vendors', 'VendorController@index')->name('admin.vendor.list');
 });
 
 Route::prefix('admin')->group(function() {

@@ -7,7 +7,9 @@
         }
     </style>
 @endsection
-
+@php
+$config = App\Config::find(1);
+@endphp
 @section('content')
 <div class="container" id="demo">
     <div class="row">
@@ -109,9 +111,16 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <label for="">
+                        Please Complete Your Payment. Transfer to Account Bank {{ $config->app_name }}.
+                        {{ $config->account_number ?? ""}} - {{ $config->bank->bank_name ?? ""}}
+                    </label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="validatedCustomFile" name="proof_of_payment">
                         <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                    </div>
+                    <div class="valid-feedback">
+                        Looks good!
                     </div>
                 </div>
             </div>

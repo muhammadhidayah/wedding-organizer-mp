@@ -37,6 +37,13 @@
                                 <label for="app_about">About</label>
                                 <textarea name="app_about" class="form-control" id="" cols="30" rows="4">{{ $config->app_about }}</textarea>
                             </div>
+                            <div class="form-group">
+                                <label for="lblAccountNumber">Account Number</label>
+                                <input type="text" name="account_number" class="form-control" value="{{ 
+                                    $config->account_number ?? ''
+                                }}">
+                            </div>
+
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
@@ -46,6 +53,19 @@
                             <div class="form-group">
                                 <label for="app_address">Address</label>
                                 <textarea name="app_address" class="form-control" id="" cols="30" rows="4">{{ $config->app_address }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="lblBank">Bank(s)</label>
+                                <select name="bank_code" id="list_bank" class="form-control">
+                                    @foreach ($listBank as $bank)
+                                        @if (isset($config) && $bank->id == $config->bank_id)
+                                            <option value="{{ $bank->id }}" selected> {{ $bank->bank_name}}</option>	
+                                        @else
+                                            <option value="{{ $bank->id }}"> {{ $bank->bank_name}}</option>	
+                                        @endif
+                                        
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

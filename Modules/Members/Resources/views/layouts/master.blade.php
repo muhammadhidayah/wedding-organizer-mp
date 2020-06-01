@@ -2,7 +2,7 @@
 <html lang="en">
 	@php
 	$config = App\Config::find(1);
-@endphp
+	@endphp
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8" />
@@ -32,7 +32,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<form class="form-inline my-2 my-lg-0 mr-auto ml-3">
+			<form class="form-inline my-2 my-lg-0 mr-auto ml-3" style="display: none">
 				<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="search" />
 			</form>
 			@if (Auth::check())
@@ -170,7 +170,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<p class="text-center">
-						© 2002-2020 Weddingku.com. Powered by Reza</p>
+						© 2019 - 2020 {{ $config->app_name }}. Powered by Reza</p>
 				</div>
 			</div>
 		</div>

@@ -2,23 +2,34 @@
 
 namespace Modules\Admin\Http\Controllers;
 
-use App\Config;
+use App\Vendor;
+use App\VendorAccountBank;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Modules\Admin\Entities\Banks;
 
-class ConfigController extends Controller
+class VendorController extends Controller
 {
     /**
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $config = Config::find(1);
-        $banks = Banks::all();
-        return view('admin::config_index', ['config' => $config, 'listBank' => $banks]);
+        $data = $request->query('data');
+        if ($data == "json") {
+            $vendors = Vendor::all();
+            foreach($vendors as $vendor) {
+                $bank = $vendor->bank;
+                if ($bank) {
+                    $bank->bank;
+                }
+                
+            }
+
+            return ['data' => $vendors];
+        }
+        return view('admin::vendor');
     }
 
     /**
@@ -27,7 +38,6 @@ class ConfigController extends Controller
      */
     public function create()
     {
-
         return view('admin::create');
     }
 
@@ -38,24 +48,7 @@ class ConfigController extends Controller
      */
     public function store(Request $request)
     {
-        $config = Config::find($request->input('id'));
-        $picture = $request->file('logo_app');
-        if ($picture !== null) {
-            $name = $picture->store('');
-            $res = $picture->move('images/apps', $name);
-            $config->logo_app = $res;
-        }
-
-        $config->app_name = $request->input('app_name');
-        $config->app_description = $request->input('app_description');
-        $config->app_about = $request->input('app_about');
-        $config->app_address = $request->input('app_address');
-        $config->phone_number = $request->input('phone_number');
-        $config->account_number = $request->input('account_number');
-        $config->bank_id = $request->input('bank_code');
-        $config->save();
-
-        return redirect()->route("admin.config");
+        //
     }
 
     /**

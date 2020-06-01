@@ -60,7 +60,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('admin.vendor.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-people-carry"></i>
                         <p>Vendor(s)</p>
                     </a>
@@ -77,6 +77,13 @@
                     <a href="{{ route('admin.order')}}" class="nav-link">
                         <i class="nav-icon fas fa-cart-arrow-down"></i>
                         <p>Order(s)</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('admin.logout')}}" class="nav-link">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Sign Out</p>
                     </a>
                 </li>
             </ul>

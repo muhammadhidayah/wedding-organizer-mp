@@ -20,7 +20,14 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="card">
-                    <img class="card-img-top" src="/modules/members/img/vendor1.jpg" alt="Card image cap">
+                    @php
+                        $photo = "/modules/members/img/vendor1.jpg";
+                        $public_path = public_path("/images/vendor");
+                        if (file_exists($public_path . "/vendor_".$vendor->id."_photo.jpeg")) {
+                            $photo = "/images/vendor/vendor_".$vendor->id."_photo.jpeg";
+                        }
+                    @endphp
+                    <img class="card-img-top" src="{{ $photo }}" alt="Card image cap">
                     <div class="card-body">
                         <span>{{ $vendor->vendor_address }}</span>
                     </div>
@@ -32,13 +39,14 @@
                         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <img class="d-block w-100" src="/modules/members/img/wedding1.jpg" alt="First slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="/modules/members/img/wedding2.jpg" alt="Second slide">
-                                </div>
-                                <div class="carousel-item">
-                                    <img class="d-block w-100" src="/modules/members/img/wedding3.jpg" alt="Third slide">
+                                    @php
+                                        $banner = "/modules/members/img/wedding1.jpg";
+                                        $public_path = public_path("/images/vendor");
+                                        if (file_exists($public_path . "/thumbnail_vendor_".$vendor->id."_banner.png")) {
+                                            $banner = "/images/vendor/thumbnail_vendor_".$vendor->id."_banner.png";
+                                        }
+                                    @endphp
+                                    <img class="d-block w-100" src="{{ $banner }}" alt="First slide" style="height: 340px;">
                                 </div>
                             </div>
                             <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
