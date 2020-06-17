@@ -262,7 +262,7 @@ $config = App\Config::find(1);
                 $('#tbl_awaitpayconfirm').DataTable().ajax.reload();
             } else if (e.target.id == 'orderprogress-tab') {
                 $('#tbl_orderprogress').DataTable().ajax.reload();
-            } else if (e.target.id == 'orderprogress-tab') {
+            } else if (e.target.id == 'ordercomplete-tab') {
                 $('#tbl_ordercomplete').DataTable().ajax.reload();
             }
         })
