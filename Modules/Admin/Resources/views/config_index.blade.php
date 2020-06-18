@@ -69,7 +69,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display: none;">
                         <div class="col-md-6">
                             <label for="exampleInputFile">Logo</label>
                             <div class="input-group">
