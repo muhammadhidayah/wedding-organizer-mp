@@ -88,8 +88,8 @@
                         <div class="row">
                             @foreach ($vendor->albums as $album)
                                 <div class="col-md-2">
-                                    <a href="/images/wedding/banner/{{ $album->banner_album }}" data-gallery="gallery-{{ $album->id }}">
-                                        <img src="" alt="">
+                                    <a href="/images/wedding/banner/{{ $album->banner_album }}" data-gallery="gallery-{{ $album->id }}" data-toggle="lightbox" lass="col-4">
+                                        <img src="/images/wedding/banner/{{ $album->banner_album }}" class="img-fluid">
                                     </a>
                                     @foreach ($album->photos as $photo)
                                         <div data-toggle="lightbox" data-gallery="gallery-{{ $album->id }}" data-remote="/images/wedding/photos/{{ $photo->photo }}" data-title="Hidden item 1"></div>
