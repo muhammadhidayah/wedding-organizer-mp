@@ -2,6 +2,9 @@
 
 namespace Modules\Admin\Http\Controllers;
 
+use App\Order;
+use App\Users;
+use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
@@ -16,7 +19,14 @@ class AdminController extends Controller
      */
     public function index()
     {
-        return view('admin::index');
+        $orders = Order::where('payment_status', 'confirmation')->count();
+        $customer = Users::where('usertype', 'member')->count();
+        $vendor = Vendor::all()->count();
+        return view('admin::index', [
+            'order' => $orders,
+            'customer' => $customer,
+            'vendor' => $vendor
+        ]);
     }
 
     /**

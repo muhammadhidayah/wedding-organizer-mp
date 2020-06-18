@@ -10,6 +10,6 @@ class VendorAccountBank extends Model
     protected $table = 'vendor_bank_account';
 
     public function bank() {
-        return $this->hasOne(Banks::class, 'id');
+        return $this->hasOne(Banks::class, 'id', 'bank_id');
     }
 }

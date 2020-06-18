@@ -247,7 +247,6 @@
 				<div class="row">
 					<div class="col-md-12">
 						<form name="create_wedding_albums" enctype="multipart/form-data">
-							@csrf
 							<div class="form-group">
 								<label for="exampleInputEmail1">Title</label>
 								<input type="title" required name="title" class="form-control" placeholder="add title" />
@@ -698,6 +697,9 @@
 
 			var formData = new FormData(this)
 			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
 				url: "{{ route('vendor.add.album') }}",
 				type: "POST",
 				data: formData,
@@ -717,7 +719,7 @@
 
 		$('form[name="create_package_form"]').on("submit", function(e) {
 			e.preventDefault()
-			var validate = $('form[name="create_wedding_albums"]').validate()
+			var validate = $('form[name="create_package_form"]').validate()
 			$.ajax({
 				url: "{{ route('vendor.add.package', ['vendor_id' => $vendor->id]) }}",
 				headers: {
@@ -811,6 +813,9 @@
 			})
 
 			$.ajax({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				},
 				type: "POST",
 				url: "{{ route('vendor.account_bank', ['vendor_id' => $vendor->id] )}}",
 				data: $(form).serialize(),
@@ -1061,6 +1066,9 @@
 				url = url.replace(":id", orderID)
 
 				$.ajax({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
 					type: "PUT",
 					url: url,
 					success: () => {

@@ -50,11 +50,11 @@ class OrderController extends Controller
         if ($promo) {
             $discount = $promo->discount_promo / 100 * $package->price_package;
             $order->total_price = $package->price_package - $discount;
+            $order->promo_id = $promo->id;
         }
         
         $date = date("Y-m-d");
         $vendor = Vendor::find($request->input('vendor_id'));
-        $order->promo_id = $promo->id;
 
         $order->vendor_id = $vendor->id;
         $order->inv_number = "INV/".$date."/".$vendor->vendor_slug."/".time();
@@ -69,9 +69,13 @@ class OrderController extends Controller
                             ->where('user_id', Auth::user()->id)
                             ->get();
             $progress = $request->query('progress');
+            $resp = [];
             foreach($orders as $key => $order) {
                 $progressOrder = $order->progress()->where('progress_order', 'completed')->get();
-                if ($progress == 'completed') {                    
+                if ($progress == 'completed') {
+                    if (count($progressOrder) <= 0) {
+                        continue;
+                    }                    
                     $order->progress = $progressOrder->first();
                 } else if ($progress !== "completed" && $payment_status == "paid") {
                     if (count($progressOrder) > 0) {
@@ -82,9 +86,10 @@ class OrderController extends Controller
                 $order->package;
                 $order->total_price = number_format($order->total_price, 0, ",", ".");
                 $order->package->vendor;
+                $resp[] = $order;
             }
 
-            return ['data' => $orders];
+            return ['data' => $resp];
         }
         return view('members::list_order');
     }
@@ -143,20 +148,24 @@ class OrderController extends Controller
     public function listOrderVendor($id, Request $request) {
         $vendor = Vendor::find($id);
         $orders = $vendor->orders;
-
+        $resp = [];
         foreach($orders as $key => $order) {
             $progressOrder = $order->progress()->where('progress_order', 'completed')->get();
             if($request->query('progress') != "completed") {
                 if (count($progressOrder) > 0) {
-                    unset($orders[$key]);
+                    continue;
+                }
+            } else if ($request->query('progress') == "completed") {
+                if (count($progressOrder) <= 0) {
                     continue;
                 }
             }
             $order->package;
             $order->user;
+            $resp[] = $order;
         }
 
-        return ['data' => $orders];
+        return ['data' => $resp];
     }
 
     public function orderDetail($id, $order_id, Request $request) {

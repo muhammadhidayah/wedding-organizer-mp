@@ -31,7 +31,7 @@ Route::group(['middleware' => ['memberauth'], 'prefix' => 'members'], function()
     Route::get('/create-vendor', 'VendorController@create')->name('members.create.vendor');
     Route::post('/create-vendor', 'VendorController@store')->name('members.create.vendor');
     Route::get('/manage-vendor', 'VendorController@manage')->name('members.manage.vendor');
-    Route::post('/manage-vendor/{id}', 'VendorController@edit')->name('vendor.edit');
+    Route::post('/manage-vendor/{id}/edit', 'VendorController@edit')->name('vendor.edit');
 
     Route::post('/manage-vendor/{vendor_id}/bank', 'VendorController@editBankAccount')->name('vendor.account_bank');
 
