@@ -20,7 +20,7 @@ class CreateOrderTable extends Migration
             $table->foreignId('package_id');
             $table->foreignId('promo_id')->nullable();
             $table->date('wedding_date');
-            $table->enum('payment_status', ['unpaid', 'paid'])->default('unpaid');
+            $table->enum('payment_status', ['unpaid','confirmation', 'paid'])->default('unpaid');
             $table->double('total_price');
             $table->timestamps();
         });

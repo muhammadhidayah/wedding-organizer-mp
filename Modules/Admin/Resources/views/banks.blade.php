@@ -125,19 +125,7 @@
 </div>
 @endsection
 
-@section('cssonpage')
-<!-- DataTables -->
-<link rel="stylesheet" href="/modules/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-<link rel="stylesheet" href="/modules/admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-@endsection
-
 @section('jsonpage')
-<!-- DataTables -->
-<script src="/modules/admin/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/modules/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="/modules/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="/modules/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
 <script>
     $(function () {
         $('#modal-default').on('hidden.bs.modal', function(){

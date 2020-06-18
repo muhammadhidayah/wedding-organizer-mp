@@ -1,0 +1,264 @@
+html body {
+  margin: 0;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+}
+
+.navbar {
+  top: 0;
+  position: fixed;
+  z-index: 2;
+  width: 100%;
+  background-color: #f5afaf;
+}
+
+.navbar-brand {
+  margin-right: 0px;
+  margin-left: 10px;
+}
+
+#search {
+  border-radius: 15px;
+}
+
+.user {
+  width: 38px;
+}
+
+#dropdownMenuButton {
+  color: rgba(0, 0, 0, 0.9);
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn.login h6 {
+  color: rgba(0, 0, 0, 0.9);
+  margin-bottom: 1px;
+}
+
+.bread {
+  padding-top: 70px;
+}
+
+#card3 {
+  height: 200px;
+}
+#cardPackage {
+  padding: 0;
+}
+.d-block {
+  height: max-content;
+}
+.package {
+  width: 100%;
+  height: 150px;
+}
+
+#buyPackage {
+  border-radius: 40px;
+}
+
+.buttonBuyPackage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jumbotron {
+  margin-bottom: 0 !important;
+}
+
+.jumbotron .container ul {
+  list-style: none;
+  display: flex;
+}
+
+.jumbotron .container ul li {
+  margin-right: 20px;
+}
+
+p {
+  margin-bottom: 0rem !important;
+}
+
+footer.manage p {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  margin-bottom: 0rem;
+}
+
+a i.fa {
+  margin-right: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  box-shadow: 0px 0px 2px #888;
+  padding: 0 0.6em;
+  height: 26px;
+  line-height: 26px;
+}
+
+.jumbotron .container ul li {
+  text-align: center;
+}
+
+.vendor-list div.row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.vendor-list .card-header {
+  padding-left: 0px;
+  padding-top: 0px;
+  padding-right: 0px;
+}
+
+.vendor-list .card-body {
+  padding: 8px 14px 7px;
+}
+
+.bg-img-banner img {
+  width: 100%;
+  height: 90px;
+}
+
+div.avatar {
+  left: 10px;
+  position: absolute;
+  padding: 0px;
+  margin: 0px;
+  top: 70px;
+}
+
+.block {
+  border: 1px solid #dddddd;
+  overflow: hidden;
+}
+
+.clear {
+  clear: both;
+  float: none !important;
+}
+
+.vendor-name a:visited {
+  color: #555555;
+  text-decoration: none;
+}
+
+ul.vendor-shown-photos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.vendor-shown-photos li {
+  float: left;
+  width: 60px;
+  height: 60px;
+  margin-right: 5px;
+  overflow: hidden;
+}
+
+li.count {
+  float: right;
+  text-align: center;
+  vertical-align: middle;
+  padding-top: 10px;
+  height: 50px;
+}
+
+.vendor-name h4 {
+  font-size: 14px;
+  line-height: 18px;
+  padding: 0px 10px;
+  margin-bottom: 10px;
+  text-align: left;
+  text-transform: capitalize;
+  font-weight: 600;
+}
+
+.card-footer i.fa {
+  color: #c6af59;
+}
+
+.about {
+  font-size: 11px;
+  text-align: left;
+  color: #8a8a8a;
+  text-transform: uppercase;
+  font-family: "Roboto", sans-serif;
+}
+
+footer {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  background-color: #e3e3db;
+  position: absolute;
+  left: 0;
+  bottom: auto;
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+}
+
+footer.manage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e3e3db;
+  position: absolute;
+  left: 0;
+  bottom: auto;
+  height: 100px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.navbar.navbar-expand-lg.navbar-light {
+  position: fixed;
+}
+
+#demo {
+  padding-top: 70px;
+}
+.nav {
+  border-bottom: #e9dede 1px solid;
+}
+/* ------------------ */
+.main-section {
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 100px;
+  background-color: #fff;
+  box-shadow: 0px 0px 20px #c1c1c1;
+}
+
+.fileinput-remove,
+.fileinput-upload {
+  display: none;
+}
+
+/* DROPZONE */
+
+.dropzone {
+  background: white;
+  border-radius: 5px;
+  border: 2px dashed rgb(0, 135, 247);
+  border-image: none;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.dz-message.needsclick {
+  width: 460px;
+  height: 100px;
+  line-height: 100px;
+  margin: auto;
+  text-align: center;
+}
+.dz-preview {
+  padding: 1em;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}

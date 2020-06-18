@@ -14,14 +14,40 @@
 // Route::prefix('admin')->group(function() {
 //     Route::get('/', 'AdminController@index');
 // });
-Route::group(['middleware' => ['adminauth'], 'prefix' => 'admin'], function()
+Route::group(['middleware' => ['adminauth', 'can:isAdmin'], 'prefix' => 'admin'], function()
 {
     Route::get('/', 'AdminController@index')->name('admin.index');
+    Route::post('/', 'ListAdminController@store')->name('admin.add');
+    Route::delete('/{id}', 'ListAdminController@destroy')->name('admin.delete');
+
+    Route::get('/signout', function() {
+        Auth::logout();
+        return redirect()->route('admin.login');
+    })->name('admin.logout');
+    Route::get('/profile', 'ProfileController@index')->name('admin.profile');
+    Route::post('/profile', 'ProfileController@store')->name('admin.profile');
+
+    Route::get('/{id}/edit', 'ListAdminController@edit')->name('admin.edit');    
+    Route::post('/{id}/edit', 'ListAdminController@update')->name('admin.update');
+
     Route::get('/banks', 'BanksController@index')->name('admin.bank');
     Route::post('/banks', 'BanksController@store')->name('admin.bank');
     Route::get('/banks/{id}', 'BanksController@edit')->name('admin.bank.detail');
-
     Route::post('/banks/{id}', 'BanksController@update')->name('admin.bank.edit');
+
+    Route::get('/list-admin', 'ListAdminController@index')->name('admin.listadmin');
+    Route::get('/list-customer', 'CustomersController@index')->name('admin.listcustomer');
+
+    Route::delete('/{id}/customer', 'CustomersController@destroy')->name('admin.customer.delete');
+
+    Route::get('/order', 'OrderController@index')->name('admin.order');
+    Route::get('/order/{id}', 'OrderController@detail')->name('admin.detail_order');
+    Route::put('/order/{id}', 'OrderController@confirmation')->name('admin.order.confirmation');
+
+    Route::get('/configs_apps', 'ConfigController@index')->name('admin.config');
+    Route::post('/configs_apps', 'ConfigController@store')->name('admin.config');
+
+    Route::get('/vendors', 'VendorController@index')->name('admin.vendor.list');
 });
 
 Route::prefix('admin')->group(function() {
