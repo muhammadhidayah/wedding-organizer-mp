@@ -9,17 +9,16 @@
 <div class="container" id="demo">
 	<div class="row">
 		<div class="col-md-12 pt-2 text-center">
-			<h2>Manage Vendor</h2>
+			<h2>kelola Vendor</h2>
 		</div>
 		<div class="col-md-12 mt-4 mb-2">
 			<nav>
 				<div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
 					<a class="nav-item nav-link active" id="nav-real-tab" data-toggle="tab" href="#nav-real" role="tab"
-						aria-controls="nav-real" aria-selected="true">Real Wedding</a>
+						aria-controls="nav-real" aria-selected="true">album</a>
 					<a class="nav-item nav-link" id="nav-package-tab" data-toggle="tab" href="#nav-package" role="tab"
-						aria-controls="nav-package" aria-selected="false">Package</a>
-					<a class="nav-item nav-link" id="nav-promo-tab" data-toggle="tab" href="#nav-promo" role="tab"
-						aria-controls="nav-promo" aria-selected="false">Promo</a>
+						aria-controls="nav-package" aria-selected="false">package</a>
+					
 					<a class="nav-item nav-link" id="nav-orders-vendor-tab" data-toggle="tab" href="#nav-orders-vendor" role="tab"
 						aria-controls="nav-orders-vendor" aria-selected="false">Order(s)</a>
 					<a class="nav-item nav-link" id="nav-config-tab" data-toggle="tab" href="#nav-config" role="tab"
@@ -37,8 +36,8 @@
 					<table id="example1" class="table table-striped table-bordered" style="width:100%">
 						<thead>
 							<tr role="row">
-								<th>Title</th>
-								<th>Thumbnail</th>
+								<th>nama</th>
+								<th>foto</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -329,7 +328,7 @@
 			<form name="create_package_form">
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="exampleInputEmail1">Package Title</label>
+						<label for="exampleInputEmail1">package Title</label>
 						<input type="text" name="package_title" required class="form-control" placeholder="add title" />
 					</div>
 					<div class="form-group">

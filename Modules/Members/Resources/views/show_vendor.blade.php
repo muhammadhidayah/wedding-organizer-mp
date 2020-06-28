@@ -66,14 +66,12 @@
                     <div class="col-md-12">
                         <ul class="nav justify-content-center" style="margin-bottom: 13px;">
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#nav-real-wedding">Real Wedding</a>
+                                <a class="nav-link" data-toggle="tab" href="#nav-real-wedding">album</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#nav-package">Package</a>
+                                <a class="nav-link" data-toggle="tab" href="#nav-package">paket</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#nav-promo">Promo</a>
-                            </li>
+                           
                             {{-- <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#nav-review">Review</a>
                             </li> --}}

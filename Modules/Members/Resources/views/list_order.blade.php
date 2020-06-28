@@ -19,19 +19,19 @@ $config = App\Config::find(1);
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link active" id="wfp-tab" data-toggle="tab" href="#wfp" role="tab"
-                                aria-controls="wfp" aria-selected="true">Waitting For Payment</a>
+                                aria-controls="wfp" aria-selected="true">Menunggu pembayaran</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="awaitpayconfirm-tab" data-toggle="tab" href="#awaitpayconfirm" role="tab"
-                                aria-controls="awaitpayconfirm" aria-selected="false">Awaiting Payment Confirmation</a>
+                                aria-controls="awaitpayconfirm" aria-selected="false">menunggu konfirmasi pembayaran</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="orderprogress-tab" data-toggle="tab" href="#orderprogress" role="tab"
-                                aria-controls="orderprogress" aria-selected="false">Order In Prgoress</a>
+                                aria-controls="orderprogress" aria-selected="false">Order sedang dikerjakan</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="ordercomplete-tab" data-toggle="tab" href="#ordercomplete" role="tab"
-                                aria-controls="ordercomplete" aria-selected="false">Order Complete</a>
+                                aria-controls="ordercomplete" aria-selected="false">Order selesai</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">

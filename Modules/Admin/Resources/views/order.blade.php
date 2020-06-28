@@ -25,12 +25,12 @@
             <li class="nav-item">
                 <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="tab"
                     href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home"
-                    aria-selected="true">Unpaid</a>
+                    aria-selected="true">belum bayar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="tab"
                     href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile"
-                    aria-selected="false">Confirmation Payments</a>
+                    aria-selected="false">Confirmasi pembayaran</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="tab"

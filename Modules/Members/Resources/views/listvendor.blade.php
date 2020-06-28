@@ -76,10 +76,7 @@
                                 @endphp
                             @endforeach 
 
-                            <li class="count">
-                                <a href="#">{{ $countPhoto }}</a>
-                                <br> Photos
-                            </li>
+                           
                         </ul>
                     </div>
 
