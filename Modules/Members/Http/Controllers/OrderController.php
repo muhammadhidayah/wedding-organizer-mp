@@ -147,7 +147,7 @@ class OrderController extends Controller
 
     public function listOrderVendor($id, Request $request) {
         $vendor = Vendor::find($id);
-        $orders = $vendor->orders;
+        $orders = $vendor->orders()->where('payment_status', 'paid')->get();
         $resp = [];
         foreach($orders as $key => $order) {
             $progressOrder = $order->progress()->where('progress_order', 'completed')->get();
