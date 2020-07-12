@@ -56,6 +56,10 @@ class OrderController extends Controller
         $date = date("Y-m-d");
         $vendor = Vendor::find($request->input('vendor_id'));
 
+        // calculate dp
+        $dp = ($package->dropdown_paymenl_val / 100) * $package->price_package;
+        $order->down_payment_val = $dp;
+
         $order->vendor_id = $vendor->id;
         $order->inv_number = "INV/".$date."/".$vendor->vendor_slug."/".time();
 
@@ -65,9 +69,17 @@ class OrderController extends Controller
     public function listOrder(Request $request) {
         $payment_status = $request->query('payment_status');
         if ($payment_status != "") {
-            $orders = Order::where('payment_status', $payment_status)
+            $orders = [];
+            if (is_array($payment_status) && count($payment_status) > 1) {
+                $orders = Order::whereIn('payment_status', $payment_status)
                             ->where('user_id', Auth::user()->id)
                             ->get();
+            } else {
+                $orders = Order::where('payment_status', $payment_status)
+                            ->where('user_id', Auth::user()->id)
+                            ->get();
+            }
+            
             $progress = $request->query('progress');
             $resp = [];
             foreach($orders as $key => $order) {
@@ -79,6 +91,14 @@ class OrderController extends Controller
                     $order->progress = $progressOrder->first();
                 } else if ($progress !== "completed" && $payment_status == "paid") {
                     if (count($progressOrder) > 0) {
+                        unset($orders[$key]);
+                        continue;
+                    }
+                }
+                
+                if (is_array($payment_status) && in_array('down_payment', $payment_status)) {
+                    $order->progress = $order->progress()->orderBy('id','desc')->first();
+                    if (!is_null($order->progress) && $order->payment_status == 'down_payment' && $order->progress->progress_order != 'waitting full payment') {
                         unset($orders[$key]);
                         continue;
                     }
@@ -147,7 +167,7 @@ class OrderController extends Controller
 
     public function listOrderVendor($id, Request $request) {
         $vendor = Vendor::find($id);
-        $orders = $vendor->orders()->where('payment_status', 'paid')->get();
+        $orders = $vendor->orders()->whereIn('payment_status', ['paid','down_payment'])->get();
         $resp = [];
         foreach($orders as $key => $order) {
             $progressOrder = $order->progress()->where('progress_order', 'completed')->get();
@@ -171,14 +191,34 @@ class OrderController extends Controller
     public function orderDetail($id, $order_id, Request $request) {
         $order = Order::find($order_id);
         $order->total_price = number_format($order->total_price, 0, ",", ".");
+        
+
+        if ($request->query('json')) {
+            $progres = $order->progress()->orderBy('id','desc')->first();
+            return [
+                'order' => $order, 
+                'progress' => $progres
+            ];
+        }
+
         $package = $order->package;
         $user = $order->user;
         $vendor = Vendor::find($id);
+        
         return view("members::order_detail", [
             'order' => $order, 
             'vendor' => $vendor,
             'user' => $user,
             'package' => $package
         ]);
+    }
+
+    public function completePaymentCustomer($order_id) {
+        $user = Auth::user();
+        $progress = new ProgressOrder();
+        $progress->progress_order = "waitting full payment";
+        $progress->order_id = $order_id;
+        $progress->user_id = $user->id;
+        return $progress->save();
     }
 }

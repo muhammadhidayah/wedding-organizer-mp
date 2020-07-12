@@ -44,6 +44,7 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Status</th>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
@@ -140,8 +141,10 @@ $config = App\Config::find(1);
 <script src="/modules/members/DataTables-1.10.21/js/dataTables.bootstrap4.js"></script>
 <script>
     $(function() {
+        var urlforwaitpayment = "{{ route('member.list.order', ['payment_status' => ['unpaid','down_payment'], 'progress' => 'complete_full_payment'] )}}";
+        urlforwaitpayment = urlforwaitpayment.replace(/&amp;/g,'&');
         $('#tbl_waitforpayment').DataTable({
-            "ajax": "{{ route('member.list.order', ['payment_status' => 'unpaid'] )}}",
+            "ajax": urlforwaitpayment,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -162,6 +165,15 @@ $config = App\Config::find(1);
                         return "Rp. "+data
                     }
                 }, {
+                    data: 'progress',
+                    render: (data) => {
+                        if (typeof data === 'object' && data !== null) {
+                            return 'Menunggu Pelunasan Pembayaran'
+                        } else {
+                            return 'Menunggu Uang Muka'
+                        }
+                    }
+                },{
                     data: 'id',
                     render: (data) => {
                         return "<button class='btn btn-primary btn-sm' onClick='showModalUploadStruc("+data+")' title='Upload Struct of Payment'><i class='fa fa-cloud-upload'></i></button>"

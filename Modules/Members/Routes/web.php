@@ -51,6 +51,7 @@ Route::group(['middleware' => ['memberauth'], 'prefix' => 'members'], function()
     Route::delete("/manage-vendor/promo/{id}", 'PromoController@destroy')->name('vendor.promo.delete');
 
     Route::get("/manage-vendor/{id}/orders", 'OrderController@listOrderVendor')->name('vendor.list.order');
+    Route::put("/manage-vendor/completepayment/orders/{id}", 'OrderController@completePaymentCustomer')->name('member.complete.fullpayment');
     Route::get("/manage-vendor/{id}/orders/{order_id}", 'OrderController@orderDetail')->name('vendor.order.detail');
 
     Route::post("/orders", "OrderController@store")->name('member.order');

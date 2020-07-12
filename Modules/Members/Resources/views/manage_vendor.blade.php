@@ -345,6 +345,18 @@
 							<span class="input-group-text">.00</span>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label for="lbl_dropdown_payment">Uang Muka</label>
+						<div class="input-group mb-3">
+							<input type="number" class="form-control" name="dropdown_payment" required>
+							<div class="input-group-append">
+								<span class="input-group-text">%</span>
+							</div>
+						</div>
+					</div>
+					
+
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-success">
@@ -559,8 +571,29 @@
 					data: 'wedding_date'
 				}, {
 					data: 'id',
-					render: (data) => {
-						return '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="updateOrderCompleted('+data+')"><i class="fa fa-check-square-o"></i></button>'
+					render: (data, type, full, meta) => {
+						var currentCell = $("#tbl_progress").DataTable().cells({"row":meta.row, "column":meta.col}).nodes(0);
+
+						var url = "{{ route('vendor.order.detail' , ['id' => $vendor->id, 'order_id' => ':order_id', 'json' => true])}}"
+						url = url.replace(":order_id", data)
+
+						$.ajax({
+							url: url,
+							type: 'GET'
+						}).done(function (data) {
+							var buttonAct = ""
+							if (data.order.payment_status == 'paid') {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="updateOrderCompleted('+data.order.id+')"><i class="fa fa-check-square-o"></i></button>'
+							} else if (data.progress.progress_order == 'waitting full payment') {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm disabled" disabled aria-disabled="true"><i class="fa fa-check-square-o"></i></button>'
+							} else {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="askToCompletePayment('+data.order.id+')"><i class="fa fa-check-square-o"></i></button>'
+							}
+							
+							$(currentCell).html(buttonAct);
+						})
+
+						return ""
 					}
 				}
             ]
@@ -1063,6 +1096,53 @@
 			if (result.value) {
 				var url = "{{ route('member.complete.order', ['id' => ':id'])}}"
 				url = url.replace(":id", orderID)
+
+				$.ajax({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					type: "PUT",
+					url: url,
+					success: () => {
+						$('#tbl_progress').DataTable().ajax.reload();
+					}
+				})
+
+				swalWithBootstrapButtons.fire(
+					'Success!',
+					'Order users has been completed',
+					'success'
+				)
+			} else if (
+				/* Read more about handling dismissals below */
+				result.dismiss === Swal.DismissReason.cancel
+			) {
+				
+			}
+		})
+	}
+
+	function askToCompletePayment(orderId) {
+		const swalWithBootstrapButtons = Swal.mixin({
+			customClass: {
+				confirmButton: 'btn btn-success',
+				cancelButton: 'btn btn-danger'
+			},
+			buttonsStyling: false
+		})
+
+		swalWithBootstrapButtons.fire({
+			title: 'Are you sure?',
+			text: "You will ask the customer to complete full payment!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, confirm it!',
+			cancelButtonText: 'No, cancel!',
+			reverseButtons: true
+		}).then((result) => {
+			if (result.value) {
+				var url = "{{ route('member.complete.fullpayment', ['id' => ':id'])}}"
+				url = url.replace(":id", orderId)
 
 				$.ajax({
 					headers: {
