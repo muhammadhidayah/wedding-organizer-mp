@@ -19,19 +19,19 @@ $config = App\Config::find(1);
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
                             <a class="nav-link active" id="wfp-tab" data-toggle="tab" href="#wfp" role="tab"
-                                aria-controls="wfp" aria-selected="true">Waitting For Payment</a>
+                                aria-controls="wfp" aria-selected="true">Menunggu pembayaran</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="awaitpayconfirm-tab" data-toggle="tab" href="#awaitpayconfirm" role="tab"
-                                aria-controls="awaitpayconfirm" aria-selected="false">Awaiting Payment Confirmation</a>
+                                aria-controls="awaitpayconfirm" aria-selected="false">menunggu konfirmasi pembayaran</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="orderprogress-tab" data-toggle="tab" href="#orderprogress" role="tab"
-                                aria-controls="orderprogress" aria-selected="false">Order In Prgoress</a>
+                                aria-controls="orderprogress" aria-selected="false">Order sedang dikerjakan</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="ordercomplete-tab" data-toggle="tab" href="#ordercomplete" role="tab"
-                                aria-controls="ordercomplete" aria-selected="false">Order Complete</a>
+                                aria-controls="ordercomplete" aria-selected="false">Order selesai</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -44,6 +44,9 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
+                                        <th>Status</th>
                                         <td>Action</td>
                                     </tr>
                                 </thead>
@@ -58,6 +61,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -71,6 +76,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -86,6 +93,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -140,8 +149,10 @@ $config = App\Config::find(1);
 <script src="/modules/members/DataTables-1.10.21/js/dataTables.bootstrap4.js"></script>
 <script>
     $(function() {
+        var urlforwaitpayment = "{{ route('member.list.order', ['payment_status' => ['unpaid','down_payment'], 'progress' => 'waitting_payment'] )}}";
+        urlforwaitpayment = urlforwaitpayment.replace(/&amp;/g,'&');
         $('#tbl_waitforpayment').DataTable({
-            "ajax": "{{ route('member.list.order', ['payment_status' => 'unpaid'] )}}",
+            "ajax": urlforwaitpayment,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -162,6 +173,25 @@ $config = App\Config::find(1);
                         return "Rp. "+data
                     }
                 }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
+                    }
+                }, {
+                    data: 'progress',
+                    render: (data) => {
+                        if (typeof data === 'object' && data !== null) {
+                            return 'Menunggu Pelunasan Pembayaran'
+                        } else {
+                            return 'Menunggu Uang Muka'
+                        }
+                    }
+                },{
                     data: 'id',
                     render: (data) => {
                         return "<button class='btn btn-primary btn-sm' onClick='showModalUploadStruc("+data+")' title='Upload Struct of Payment'><i class='fa fa-cloud-upload'></i></button>"
@@ -196,12 +226,24 @@ $config = App\Config::find(1);
                     render: (data) => {
                         return "Rp. "+data
                     }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
+                    }
                 }
             ]
         })
 
+        var urlfororderprogress = "{{ route('member.list.order', ['payment_status' => ['paid','down_payment']] )}}";
+        urlfororderprogress = urlfororderprogress.replace(/&amp;/g,'&');
         $('#tbl_orderprogress').DataTable({
-            "ajax": "{{ route('member.list.order', ['payment_status' => 'paid'] )}}",
+            "ajax": urlfororderprogress,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -220,6 +262,16 @@ $config = App\Config::find(1);
                     data: 'total_price',
                     render: (data) => {
                         return "Rp. "+data
+                    }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
                     }
                 }, {
                     data: 'id',
@@ -250,6 +302,16 @@ $config = App\Config::find(1);
                     data: 'total_price',
                     render: (data) => {
                         return "Rp. "+data
+                    }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
                     }
                 }
             ]

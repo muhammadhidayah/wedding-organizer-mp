@@ -9,17 +9,16 @@
 <div class="container" id="demo">
 	<div class="row">
 		<div class="col-md-12 pt-2 text-center">
-			<h2>Manage Vendor</h2>
+			<h2>kelola Vendor</h2>
 		</div>
 		<div class="col-md-12 mt-4 mb-2">
 			<nav>
 				<div class="nav nav-tabs mb-2" id="nav-tab" role="tablist">
 					<a class="nav-item nav-link active" id="nav-real-tab" data-toggle="tab" href="#nav-real" role="tab"
-						aria-controls="nav-real" aria-selected="true">Real Wedding</a>
+						aria-controls="nav-real" aria-selected="true">album</a>
 					<a class="nav-item nav-link" id="nav-package-tab" data-toggle="tab" href="#nav-package" role="tab"
-						aria-controls="nav-package" aria-selected="false">Package</a>
-					<a class="nav-item nav-link" id="nav-promo-tab" data-toggle="tab" href="#nav-promo" role="tab"
-						aria-controls="nav-promo" aria-selected="false">Promo</a>
+						aria-controls="nav-package" aria-selected="false">package</a>
+					
 					<a class="nav-item nav-link" id="nav-orders-vendor-tab" data-toggle="tab" href="#nav-orders-vendor" role="tab"
 						aria-controls="nav-orders-vendor" aria-selected="false">Order(s)</a>
 					<a class="nav-item nav-link" id="nav-config-tab" data-toggle="tab" href="#nav-config" role="tab"
@@ -37,8 +36,8 @@
 					<table id="example1" class="table table-striped table-bordered" style="width:100%">
 						<thead>
 							<tr role="row">
-								<th>Title</th>
-								<th>Thumbnail</th>
+								<th>nama</th>
+								<th>foto</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -329,7 +328,7 @@
 			<form name="create_package_form">
 				<div class="modal-body">
 					<div class="form-group">
-						<label for="exampleInputEmail1">Package Title</label>
+						<label for="exampleInputEmail1">package Title</label>
 						<input type="text" name="package_title" required class="form-control" placeholder="add title" />
 					</div>
 					<div class="form-group">
@@ -346,6 +345,18 @@
 							<span class="input-group-text">.00</span>
 						</div>
 					</div>
+
+					<div class="form-group">
+						<label for="lbl_dropdown_payment">Uang Muka</label>
+						<div class="input-group mb-3">
+							<input type="number" class="form-control" name="dropdown_payment" required>
+							<div class="input-group-append">
+								<span class="input-group-text">%</span>
+							</div>
+						</div>
+					</div>
+					
+
 				</div>
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-success">
@@ -560,8 +571,29 @@
 					data: 'wedding_date'
 				}, {
 					data: 'id',
-					render: (data) => {
-						return '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="updateOrderCompleted('+data+')"><i class="fa fa-check-square-o"></i></button>'
+					render: (data, type, full, meta) => {
+						var currentCell = $("#tbl_progress").DataTable().cells({"row":meta.row, "column":meta.col}).nodes(0);
+
+						var url = "{{ route('vendor.order.detail' , ['id' => $vendor->id, 'order_id' => ':order_id', 'json' => true])}}"
+						url = url.replace(":order_id", data)
+
+						$.ajax({
+							url: url,
+							type: 'GET'
+						}).done(function (data) {
+							var buttonAct = ""
+							if (data.order.payment_status == 'paid') {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="updateOrderCompleted('+data.order.id+')"><i class="fa fa-check-square-o"></i></button>'
+							} else if (data.progress.progress_order == 'waitting full payment') {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm disabled" disabled aria-disabled="true"><i class="fa fa-check-square-o"></i></button>'
+							} else {
+								buttonAct = '<button class="btn btn-sm btn-primary" onClick="detailOrder('+data.order.id+')"><i class="fa fa-info-circle"></i></button><button class="btn btn-sm btn-success" onClick="askToCompletePayment('+data.order.id+')"><i class="fa fa-check-square-o"></i></button>'
+							}
+							
+							$(currentCell).html(buttonAct);
+						})
+
+						return ""
 					}
 				}
             ]
@@ -1064,6 +1096,53 @@
 			if (result.value) {
 				var url = "{{ route('member.complete.order', ['id' => ':id'])}}"
 				url = url.replace(":id", orderID)
+
+				$.ajax({
+					headers: {
+						'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+					},
+					type: "PUT",
+					url: url,
+					success: () => {
+						$('#tbl_progress').DataTable().ajax.reload();
+					}
+				})
+
+				swalWithBootstrapButtons.fire(
+					'Success!',
+					'Order users has been completed',
+					'success'
+				)
+			} else if (
+				/* Read more about handling dismissals below */
+				result.dismiss === Swal.DismissReason.cancel
+			) {
+				
+			}
+		})
+	}
+
+	function askToCompletePayment(orderId) {
+		const swalWithBootstrapButtons = Swal.mixin({
+			customClass: {
+				confirmButton: 'btn btn-success',
+				cancelButton: 'btn btn-danger'
+			},
+			buttonsStyling: false
+		})
+
+		swalWithBootstrapButtons.fire({
+			title: 'Are you sure?',
+			text: "You will ask the customer to complete full payment!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, confirm it!',
+			cancelButtonText: 'No, cancel!',
+			reverseButtons: true
+		}).then((result) => {
+			if (result.value) {
+				var url = "{{ route('member.complete.fullpayment', ['id' => ':id'])}}"
+				url = url.replace(":id", orderId)
 
 				$.ajax({
 					headers: {

@@ -10,6 +10,6 @@ class Config extends Model
     protected $table = 'config_apps';
 
     public function bank() {
-        return $this->hasOne(Banks::class, 'id');
+        return $this->hasOne(Banks::class, 'id', 'bank_id');
     }
 }

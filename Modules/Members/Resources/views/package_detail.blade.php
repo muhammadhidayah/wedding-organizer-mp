@@ -15,6 +15,13 @@
             </td>
         </tr>
         <tr>
+            <td>Down Payment</td>
+            <td>:</td>
+            <td>
+                {{ $package->dropdown_paymenl_val }}% - (Rp. {{ $dp_in_idr }})
+            </td>
+        </tr>
+        <tr>
             <td>Description</td>
             <td>:</td>
             <td>

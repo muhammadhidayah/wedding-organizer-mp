@@ -64,8 +64,11 @@ class PaymentController extends Controller
         $paymentProof->payment_proof_img = $imgName;
         $paymentProof->save();
 
+        $latestProgress = $order->progress()->orderBy('id','desc')->first();
+        $progressDesc = is_null($latestProgress) ? "downpayment confirmation" : "fullpayment confirmation";
+
         $progressOrder = new ProgressOrder();
-        $progressOrder->progress_order = "payment confirmation";
+        $progressOrder->progress_order = $progressDesc;
         $progressOrder->order_id = $order->id;
         $progressOrder->user_id = $user->id;
 

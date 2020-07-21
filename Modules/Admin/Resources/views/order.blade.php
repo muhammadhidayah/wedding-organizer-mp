@@ -25,12 +25,12 @@
             <li class="nav-item">
                 <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="tab"
                     href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home"
-                    aria-selected="true">Unpaid</a>
+                    aria-selected="true">belum bayar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="tab"
                     href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile"
-                    aria-selected="false">Confirmation Payments</a>
+                    aria-selected="false">konfirmasi pembayaran</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="custom-tabs-three-messages-tab" data-toggle="tab"
@@ -70,6 +70,9 @@
                                         Package
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
+                                        Keterangan
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
                                         Action(s)
                                     </th>
                                 </tr>
@@ -102,6 +105,9 @@
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
                                         Payment Proof
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
+                                        Keterangan
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1">
                                         Action(s)
@@ -182,8 +188,10 @@
             event.preventDefault();
             $(this).ekkoLightbox();
         });
+        var urlWaitForPayment = "{{ route('admin.order', ['status' => ['unpaid','down_payment'], 'progress' => 'waitting_payment'] )}}";
+        urlWaitForPayment = urlWaitForPayment.replace(/&amp;/g, '&')
         $('#example1').DataTable({
-            "ajax": "{{ route('admin.order', ['status' => 'unpaid'] )}}",
+            "ajax": urlWaitForPayment,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -204,6 +212,15 @@
                     data: 'package.vendor.vendor_name'
                 }, {
                     data: 'package.title_package'
+                }, {
+                    data: 'progress',
+                    render: (data) => {
+                        if (data !== null) {
+                            return 'Pelunasan Pembayaran'
+                        } else {
+                            return 'Pembayaran Uang Muka'
+                        }
+                    }
                 }, {
                     data: 'id',
                     className: "text-center",
@@ -237,13 +254,22 @@
                     render: (data) => {
                         return 'Rp. '+data
                     }
-                }, {
+                },{
                     data: 'payment_proof',
                     className: "text-center",
                     render: (data) => {
                         return '<a href="{{ url("/images/payment") }}/'+data+'" data-toggle="lightbox" class="btn btn-sm btn-default"><i class="fas fa-eye"></i></a>'
                     }
                 }, {
+                    data: 'progress',
+                    render: (data) => {
+                        if (data.progress_order == 'downpayment confirmation') {
+                            return 'Pembayaran Uang Muka'
+                        } else {
+                            return 'Pelunasan Pembayaran'
+                        }
+                    }
+                },  {
                     data: 'id',
                     className: "text-center",
                     render: (data) => {

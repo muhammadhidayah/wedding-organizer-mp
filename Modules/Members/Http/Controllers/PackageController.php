@@ -42,13 +42,15 @@ class PackageController extends Controller
         $validate = $request->validate([
             "package_title" => 'required',
             "detail_package" => 'required',
-            "price_package" => 'required|numeric'
+            "price_package" => 'required|numeric',
+            "dropdown_payment" => 'required|numeric'
         ]);
 
         $package = new VendorPackage();
         $package->title_package = $validate['package_title'];
         $package->detail_package = $validate['detail_package'];
         $package->price_package = $validate['price_package'];
+        $package->dropdown_paymenl_val = $validate['dropdown_payment'];
         $package->vendor_id = $vendor_id;
 
         return $package->save();
@@ -62,8 +64,15 @@ class PackageController extends Controller
     public function show($id)
     {
         $package = VendorPackage::find($id);
+        
+
+        // calculate dp in IDR
+        $dpVal = $package->dropdown_paymenl_val; 
+        $price = $package->price_package;
+        $dp = ($dpVal / 100) * $price;
+        $dp = number_format($dp, 2, ',', '.');
         $package->price_package = number_format($package->price_package, 2, ',', '.');
-        return view('members::package_detail', ['package' => $package]);
+        return view('members::package_detail', ['package' => $package, 'dp_in_idr' => $dp]);
     }
 
     /**

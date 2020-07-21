@@ -17,11 +17,34 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        
         $status = $request->query('status');
         if ($status == 'unpaid' || $status == 'paid') {
             return ['data' => $this->getListOrderUnpaid($status)];
         } else if ($status == 'confirmation') {
             return ['data' => $this->getListOrderToConfirm()];
+        }
+
+        if (is_array($status)) {
+            $orders = Order::whereIn('payment_status', $status)->get();
+            $data = [];
+            foreach($orders as $order) {
+                $progress = $order->progress()->orderBy('id', 'desc')->first();
+                if ($order->payment_status == 'down_payment') {
+                    if ($progress->progress_order != 'waitting full payment') {
+                        continue;
+                    }
+                }
+
+                $user = $order->user;
+                $user->password = "";
+                $package = $order->package;
+                $vendor = $package->vendor;
+                $order->progress = $progress;
+                $data[] = $order;
+            }
+
+            return ['data' => $data];
         }
         return view('admin::order');
     }
@@ -48,7 +71,15 @@ class OrderController extends Controller
     public function getListOrderToConfirm() {
         $orders = Order::where('payment_status', 'confirmation')->get();
         foreach($orders as $order) {
+            $progress = $order->progress()->orderBy('id', 'desc')->first();
+            if ($progress->progress_order == 'downpayment confirmation') {
+                $order->total_price = $order->down_payment_val;
+
+            } else {
+                $order->total_price -= $order->down_payment_val;
+            }
             $order->total_price = number_format($order->total_price, 2, ',', '.');
+            $order->progress = $progress;
             $user = $order->user;
             $user->password = "";
             $package = $order->package;
@@ -63,16 +94,33 @@ class OrderController extends Controller
     public function confirmation(Request $request, $id) {
         $order = Order::find($id);
         $confirmation = $request->input('confirmation');
+        $progress = $order->progress()->orderBy('id','desc')->first();
+
         $orderProgress = new ProgressOrder();
         $orderProgress->order_id = $id;
         $orderProgress->user_id = Auth::user()->id;
+
         if ($confirmation == 'true') {
-            $order->payment_status = "paid";
-            $orderProgress->progress_order = "payment confirmation";
+            if ($progress->progress_order == "fullpayment confirmation") {
+                $payment_status = "paid";
+                $progress_order = "fullpayment complete";
+            } else {
+                $payment_status = "down_payment";
+                $progress_order = "downpayment complete";
+            }
         } else {
-            $order->payment_status = "unpaid";
-            $orderProgress->progress_order = "payment reject";
+            if ($progress->progress_order == "fullpayment confirmation") {
+                $payment_status = "down_payment";
+                $progress_order = "fullpayment reject";
+            } else {
+                $payment_status = "unpaid";
+                $progress_order = "downpayment reject";
+            }
         }
+
+        $order->payment_status = $payment_status;
+        $orderProgress->progress_order = $progress_order;
+
         $orderProgress->save();
         return $order->save();
     }
