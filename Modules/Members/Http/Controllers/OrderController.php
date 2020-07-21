@@ -84,6 +84,7 @@ class OrderController extends Controller
             $resp = [];
             foreach($orders as $key => $order) {
                 $progressOrder = $order->progress()->where('progress_order', 'completed')->get();
+
                 if ($progress == 'completed') {
                     if (count($progressOrder) <= 0) {
                         continue;
@@ -98,17 +99,23 @@ class OrderController extends Controller
                 
                 if (is_array($payment_status) && in_array('down_payment', $payment_status)) {
                     $order->progress = $order->progress()->orderBy('id','desc')->first();
-                    if (!is_null($order->progress) && $order->payment_status == 'down_payment' && $order->progress->progress_order != 'waitting full payment') {
+                    if ((($order->payment_status == 'down_payment' && $order->progress->progress_order == 'downpayment complete') || ($order->payment_status == 'paid' && $order->progress->progress_order == 'fullpayment complete')) && $progress != 'waitting_payment') {
+                        // do nothing
+                        // dd($order->progress);
+                    } else if (!is_null($order->progress) &&( $order->payment_status == 'down_payment' ||  $order->payment_status == 'paid' )&& $order->progress->progress_order != 'waitting full payment') {
                         unset($orders[$key]);
                         continue;
                     }
                 }
                 $order->package;
+                $order->deviation_price =  number_format($order->total_price - $order->down_payment_val, 0, ",", ".");
                 $order->total_price = number_format($order->total_price, 0, ",", ".");
+                $order->down_payment_val = number_format($order->down_payment_val, 0, ",", ".");
+                
                 $order->package->vendor;
                 $resp[] = $order;
             }
-
+            // exit;
             return ['data' => $resp];
         }
         return view('members::list_order');

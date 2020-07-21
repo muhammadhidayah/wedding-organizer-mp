@@ -44,6 +44,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                         <th>Status</th>
                                         <td>Action</td>
                                     </tr>
@@ -59,6 +61,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -72,6 +76,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -87,6 +93,8 @@ $config = App\Config::find(1);
                                         <th>Paket</th>
                                         <th>Vendor</th>
                                         <th>Price</th>
+                                        <th>Uang DP</th>
+                                        <th>Uang Pelunasan</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -141,7 +149,7 @@ $config = App\Config::find(1);
 <script src="/modules/members/DataTables-1.10.21/js/dataTables.bootstrap4.js"></script>
 <script>
     $(function() {
-        var urlforwaitpayment = "{{ route('member.list.order', ['payment_status' => ['unpaid','down_payment'], 'progress' => 'complete_full_payment'] )}}";
+        var urlforwaitpayment = "{{ route('member.list.order', ['payment_status' => ['unpaid','down_payment'], 'progress' => 'waitting_payment'] )}}";
         urlforwaitpayment = urlforwaitpayment.replace(/&amp;/g,'&');
         $('#tbl_waitforpayment').DataTable({
             "ajax": urlforwaitpayment,
@@ -163,6 +171,16 @@ $config = App\Config::find(1);
                     data: 'total_price',
                     render: (data) => {
                         return "Rp. "+data
+                    }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
                     }
                 }, {
                     data: 'progress',
@@ -208,12 +226,24 @@ $config = App\Config::find(1);
                     render: (data) => {
                         return "Rp. "+data
                     }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
+                    }
                 }
             ]
         })
 
+        var urlfororderprogress = "{{ route('member.list.order', ['payment_status' => ['paid','down_payment']] )}}";
+        urlfororderprogress = urlfororderprogress.replace(/&amp;/g,'&');
         $('#tbl_orderprogress').DataTable({
-            "ajax": "{{ route('member.list.order', ['payment_status' => 'paid'] )}}",
+            "ajax": urlfororderprogress,
             "paging": true,
             "lengthChange": false,
             "searching": false,
@@ -232,6 +262,16 @@ $config = App\Config::find(1);
                     data: 'total_price',
                     render: (data) => {
                         return "Rp. "+data
+                    }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
                     }
                 }, {
                     data: 'id',
@@ -262,6 +302,16 @@ $config = App\Config::find(1);
                     data: 'total_price',
                     render: (data) => {
                         return "Rp. "+data
+                    }
+                }, {
+                    data: 'down_payment_val',
+                    render: (data) => {
+                        return "Rp. "+data
+                    }
+                }, {
+                    data: 'deviation_price',
+                    render: (data) => {
+                        return "Rp. " + data
                     }
                 }
             ]
