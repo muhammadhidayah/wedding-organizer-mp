@@ -78,7 +78,6 @@ $config = App\Config::find(1);
                                         <th>Price</th>
                                         <th>Uang DP</th>
                                         <th>Uang Pelunasan</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -272,11 +271,6 @@ $config = App\Config::find(1);
                     data: 'deviation_price',
                     render: (data) => {
                         return "Rp. " + data
-                    }
-                }, {
-                    data: 'id',
-                    render: (data) => {
-                        return '<button class="btn btn-sm btn-success" onClick="completeOrder('+data+')"><i class="fa fa-check-square-o"></i></button>'
                     }
                 }
             ]
