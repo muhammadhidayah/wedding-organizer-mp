@@ -17,7 +17,7 @@ class CustomersController extends Controller
     {
         $json = $request->query('data');
         if ($json != "") {
-            $customers = Users::where('usertype', 'member')->get();
+            $customers = Users::where('usertype', 'customer')->get();
             return ['data' => $customers];
         }
         return view('admin::list_customer');
