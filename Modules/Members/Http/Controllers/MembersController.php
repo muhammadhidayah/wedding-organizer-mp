@@ -20,8 +20,25 @@ class MembersController extends Controller
      */
     public function index()
     {
-        $vendor = Vendor::all();
-        return view('members::listvendor', ['vendors' => $vendor]);
+        $user = Auth::user();
+        if ($user == "") {
+            $vendor = Vendor::all();
+            return view('members::listvendor', ['vendors' => $vendor]);
+        }
+
+        $user_id = $user->id;
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'vendor') {
+            $vendor = Users::find($user_id)->vendor;
+            if ($vendor == "") {
+                return redirect("members/create-vendor");
+            } else {
+                return redirect("members/manage-vendor");
+            }
+        } else {
+            $vendor = Vendor::all();
+            return view('members::listvendor', ['vendors' => $vendor]);
+        }
     }
 
     /**
@@ -40,7 +57,8 @@ class MembersController extends Controller
         ]);
 
         if (Auth::attempt(['email' => $validate['username'], 'password' => $validate['password'] ])) {
-            return redirect("/");
+            return Auth::user()->name;
+            // return redirect("/");
         }
 
         return response("", 401);
@@ -71,6 +89,7 @@ class MembersController extends Controller
         $user->email = $request->input('email');
         $user->mobile_phone = $request->input('phone_number');
         $user->password = Hash::make($request->input('password'));
+        $user->usertype = $request->input("type_user");
         $user->save();
 
         Auth::attempt([
@@ -79,7 +98,13 @@ class MembersController extends Controller
 
         ]);
 
-        return redirect("members");
+        if ($user->usertype == 'vendor') {
+            return redirect('members/create-vendor');
+        } else {
+            return redirect("members");
+        }
+
+        
     }
 
     public function viewprofile() {

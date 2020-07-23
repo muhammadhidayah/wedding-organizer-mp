@@ -67,6 +67,18 @@
                                 <label id="password_confirmation-error" class="error" for="password_confirmation">{{ $message }}</label>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="type_user">User Type</label>
+                            
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="type_user_vendor" name="type_user" value="vendor" class="custom-control-input">
+                            <label class="custom-control-label" for="type_user_vendor">Vendor</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="type_user_customer" name="type_user" value="customer" class="custom-control-input">
+                            <label class="custom-control-label" for="type_user_customer">Customer</label>
+                        </div>
                         <div class="text-right">
                             <button type="submit" class="btn btn-primary">Register</button>
                         </div>

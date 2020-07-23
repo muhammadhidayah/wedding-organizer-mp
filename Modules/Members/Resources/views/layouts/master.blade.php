@@ -50,9 +50,12 @@
 				</button>
 				<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 					<a class="dropdown-item" href="{{ route('member.profile')}}">My Profile</a>
-					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">Manage Vendor</a>
 					
+					@if (Auth::user()->usertype == "vendor")
+					<a class="dropdown-item" href="{{ route('members.create.vendor') }}">Manage Vendor</a>
+					@else
 					<a class="dropdown-item" href="{{ route('member.list.order')}}">My Orders</a>
+					@endif
 					<a class="dropdown-item" href="{{ route('member.logout')}}">SIGN OUT</a>
 				</div>
 

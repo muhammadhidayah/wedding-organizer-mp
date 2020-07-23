@@ -22,6 +22,10 @@ class VendorController extends Controller
      */
     public function index()
     {
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'customer') {
+            return redirect("/");
+        }
         $vendor = Vendor::where('user_id', Auth::id())->first();
         return redirect("/manage-vendor", ['vendor' => $vendor]);
     }
@@ -32,6 +36,11 @@ class VendorController extends Controller
      */
     public function create()
     {
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'customer') {
+            return redirect("/");
+        }
+
         $vendor = Vendor::where('user_id', Auth::id())->first();
         if ($vendor) {
             return redirect("/manage-vendor", ['vendor' => $vendor]);
@@ -75,6 +84,10 @@ class VendorController extends Controller
     }
 
     public function manage() {
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'customer') {
+            return redirect("/");
+        }
         $vendor = Vendor::where("user_id", Auth::id())->first();
         $package = VendorPackage::where('vendor_id', $vendor->id)->get();
         $bankAccount = $vendor->bank;
@@ -218,6 +231,10 @@ class VendorController extends Controller
     }
 
     public function showVendor($slug) {
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'vendor') {
+            return redirect("members/manage-vendor");
+        }
         $vendor = Vendor::where('vendor_slug', $slug)->first();
         return view("members::show_vendor", ['vendor' => $vendor]);
     }

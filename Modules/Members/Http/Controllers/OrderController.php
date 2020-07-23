@@ -68,6 +68,10 @@ class OrderController extends Controller
 
     public function listOrder(Request $request) {
         $payment_status = $request->query('payment_status');
+        $usertype = Auth::user()->usertype;
+        if ($usertype == 'vendor') {
+            return redirect("members/manage-vendor");
+        }
         if ($payment_status != "") {
             $orders = [];
             if (is_array($payment_status) && count($payment_status) > 1) {
