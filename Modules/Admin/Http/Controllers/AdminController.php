@@ -20,7 +20,7 @@ class AdminController extends Controller
     public function index()
     {
         $orders = Order::where('payment_status', 'confirmation')->count();
-        $customer = Users::where('usertype', 'member')->count();
+        $customer = Users::where('usertype', 'customer')->count();
         $vendor = Vendor::all()->count();
         return view('admin::index', [
             'order' => $orders,
