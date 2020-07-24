@@ -13,7 +13,7 @@ class Order extends Model
     }
 
     public function package() {
-        return $this->belongsTo('App\VendorPackage', 'package_id');
+        return $this->belongsTo('App\VendorPackage', 'package_id')->withTrashed();
     }
 
     public function confirmation() {
