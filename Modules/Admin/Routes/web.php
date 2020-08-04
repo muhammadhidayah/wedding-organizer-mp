@@ -48,6 +48,9 @@ Route::group(['middleware' => ['adminauth', 'can:isAdmin'], 'prefix' => 'admin']
     Route::post('/configs_apps', 'ConfigController@store')->name('admin.config');
 
     Route::get('/vendors', 'VendorController@index')->name('admin.vendor.list');
+    Route::put('/vendors/delete{id}', 'VendorController@delete')->name('admin.vendor.delete');
+    Route::put('/vendors/confirm/{id}', 'VendorController@confirm')->name('admin.vendor.confirm');
+    Route::delete('/vendors/reject/{id}', 'VendorController@reject')->name('admin.vendor.reject');
 });
 
 Route::prefix('admin')->group(function() {

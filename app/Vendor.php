@@ -4,9 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Modules\Members\Entities\AlbumWedding;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vendor extends Model
 {
+    use SoftDeletes;
     //
     protected $table = 'vendor';
 

@@ -8,6 +8,9 @@
 <div class="container" id="demo">
     <div class="row" id="navAddVendor">
         <div class="col-md-12 text-center mt-5 mb-5">
+            <div class="alert alert-warning" role="alert" style="display: none;">
+                Vendor is waitting for review by admin
+            </div>
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal_create_vendor" id="btn_add_vendor">
                 ADD VENDOR
             </button>
@@ -75,6 +78,17 @@
                 }
             })
 
+        })
+
+
+
+        $(function() {
+            @isset($is_confirm)
+            @if ($is_confirm === 'waitting')
+                $('.alert').removeAttr('style')
+                $('#btn_add_vendor').attr('disabled', 'true')
+            @endif
+            @endisset
         })
     </script>
 @endsection

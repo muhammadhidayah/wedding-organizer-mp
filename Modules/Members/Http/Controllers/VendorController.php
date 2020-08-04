@@ -44,6 +44,8 @@ class VendorController extends Controller
         $vendor = Vendor::where('user_id', Auth::id())->first();
         if ($vendor) {
             return redirect("/manage-vendor", ['vendor' => $vendor]);
+        } else if ($vendor && $vendor->is_confirm == 0) {
+            return view('members::vendor_create', ['is_confirm' => 'waitting']);
         }
 
         return view('members::vendor_create');        
@@ -89,6 +91,12 @@ class VendorController extends Controller
             return redirect("/");
         }
         $vendor = Vendor::where("user_id", Auth::id())->first();
+        if (!$vendor) {
+            return redirect("/");
+        }
+        if ($vendor && $vendor->is_confirm == 0) {
+            return view('members::vendor_create', ['is_confirm' => 'waitting']);
+        }
         $package = VendorPackage::where('vendor_id', $vendor->id)->get();
         $bankAccount = $vendor->bank;
         $listBank = Banks::all();

@@ -18,7 +18,9 @@ class VendorController extends Controller
     {
         $data = $request->query('data');
         if ($data == "json") {
-            $vendors = Vendor::all();
+            $vendors = [];
+            $is_confirm = $request->query('confirm');
+            $vendors = Vendor::where('is_confirm', $is_confirm)->get();
             foreach($vendors as $vendor) {
                 $bank = $vendor->bank;
                 if ($bank) {
@@ -90,5 +92,21 @@ class VendorController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function delete($id) {
+        $vendor = Vendor::find($id);
+        $vendor->delete();
+    }
+
+    public function confirm($id) {
+        $vendor = Vendor::find($id);
+        $vendor->is_confirm = 1;
+        return $vendor->save();
+    }
+
+    public function reject($id) {
+        $vendor = Vendor::find($id);
+        $vendor->forceDelete();
     }
 }

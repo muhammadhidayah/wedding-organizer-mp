@@ -11,7 +11,7 @@ class VendorPackage extends Model
     protected $table = 'vendor_package';
 
     public function vendor() {
-        return $this->belongsTo('App\Vendor', 'vendor_id');
+        return $this->belongsTo('App\Vendor', 'vendor_id')->withTrashed();
     }
 
     public function promo() {
