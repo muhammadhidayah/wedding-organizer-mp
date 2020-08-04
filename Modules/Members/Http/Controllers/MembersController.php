@@ -22,7 +22,7 @@ class MembersController extends Controller
     {
         $user = Auth::user();
         if ($user == "") {
-            $vendor = Vendor::all();
+            $vendor = Vendor::where('is_confirm', 1)->get();
             return view('members::listvendor', ['vendors' => $vendor]);
         }
 
@@ -36,7 +36,7 @@ class MembersController extends Controller
                 return redirect("members/manage-vendor");
             }
         } else {
-            $vendor = Vendor::all();
+            $vendor = Vendor::where('is_confirm', 1)->get();
             return view('members::listvendor', ['vendors' => $vendor]);
         }
     }
